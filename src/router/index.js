@@ -2,6 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from "../views/Login";
 import Signin from "../views/Signin";
+import ManagementMenuPlanning from "../views/ManagementMenuPlanning";
+import store from '../store/index'
+
 
 const routes = [
   {
@@ -27,11 +30,38 @@ const routes = [
     name: 'Login',
     component: Login
   },
+  {
+    path: '/menuPlanning',
+    name: 'MenuPlanning',
+    component: ManagementMenuPlanning,
+    meta: { requiresAuth: true }
+  },
+
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
 })
+
+router.beforeEach((to, from, next) => {
+  console.log(to.matched.some(record => record.meta.requiresAuth))
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (store.getters.token) {
+      next();
+      return;
+    }
+
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    })
+
+    return;
+  }
+
+  next()
+})
+
 
 export default router

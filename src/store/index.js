@@ -9,6 +9,7 @@ export default createStore({
         user : {},
         plannings: {},
         contacts: {},
+
     },
     mutations: {
         UPDATE_TOKEN(state, token) {
