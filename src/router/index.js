@@ -4,7 +4,9 @@ import Login from "../views/Login";
 import Signin from "../views/Signin";
 import ManagementMenuPlanning from "../views/ManagementMenuPlanning";
 import store from '../store/index'
-
+import Planning from "../views/Planning";
+import ManagementMenuContacts from "../views/ManagementMenuContacts";
+import CreatePlanning from "../views/CreatePlanning";
 
 const routes = [
   {
@@ -36,6 +38,28 @@ const routes = [
     component: ManagementMenuPlanning,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/menuContacts',
+    name: 'MenuContacts',
+    component: ManagementMenuContacts,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id',
+    name: 'planning',
+    component: Planning,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning',
+    name: 'planningCreate',
+    component: CreatePlanning,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+  }
 
 ]
 
@@ -45,7 +69,16 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to.matched.some(record => record.meta.requiresAuth))
+  if (to.name === 'Logout') {
+    store.dispatch('updateToken', '').then(() => {
+      next({
+        path: '/',
+      })
+    })
+
+    return;
+  }
+
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.token) {
       next();

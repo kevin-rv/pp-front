@@ -11,7 +11,9 @@
           <input type="password" class="form-control" id="floatingPassword" placeholder="Password" v-model="password">
           <label for="floatingPassword">Password</label>
         </div>
+        <div class="d-flex justify-content-center">
         <a href="#" class="btn btn-primary mt-3" @click="login">Login</a>
+        </div>
       </div>
     </div>
   </div>
