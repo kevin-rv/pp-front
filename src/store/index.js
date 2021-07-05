@@ -11,7 +11,7 @@ export default createStore({
         tasks:[],
         plannings: [],
         contacts: [],
-
+        message: [],
     },
     mutations: {
         UPDATE_TOKEN(state, token) {
@@ -29,7 +29,7 @@ export default createStore({
         },
         UPDATE_ALL_CONTACT(state, contacts) {
             state.contacts = contacts;
-        }
+        },
     },
     actions: {
         updateToken({commit}, token) {
@@ -47,7 +47,7 @@ export default createStore({
         },
         updateAllContacts({commit}, contacts) {
             commit('UPDATE_ALL_CONTACT', contacts)
-        }
+        },
     },
     getters: {
         token(state) {
@@ -73,7 +73,7 @@ export default createStore({
         },
         allContacts(state) {
             return state.contacts
-        }
+        },
     },
     modules: {
 

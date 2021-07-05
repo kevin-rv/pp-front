@@ -27,10 +27,28 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    createOnePlanning()
+    createOnePlanning(name)
     {
         return axios
-            .post(this.rootPath + '/planning', qs.stringify({name}), {headers: { 'authorization': 'Bearer ' + this.token }})
+            .post(this.rootPath + '/planning', qs.stringify({name}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    createOneTask(id, shortDescription, done, doneLimitDate)
+    {
+        console.log(qs.stringify({shortDescription, done, doneLimitDate}));
+
+        return axios
+            .post(this.rootPath + '/planning/' + id + '/task', qs.stringify({shortDescription, done, doneLimitDate}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
             .then((response) => {
                 return response.data
             })
@@ -47,6 +65,7 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+
     getPlanningAllEvents(id) {
         return axios
             .get(this.rootPath + '/planning/' + id + '/event', {headers: { 'authorization': 'Bearer ' + this.token }})
@@ -55,6 +74,7 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+
     getPlanningAllTasks(id) {
         return axios
             .get(this.rootPath + '/planning/' + id + '/task', {headers: { 'authorization': 'Bearer ' + this.token }})
@@ -63,6 +83,7 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+
     getAllContact() {
         return axios
             .get(this.rootPath + '/contacts' , {headers: { 'authorization': 'Bearer ' + this.token }})

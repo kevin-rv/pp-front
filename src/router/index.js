@@ -7,6 +7,9 @@ import store from '../store/index'
 import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/ManagementMenuContacts";
 import CreatePlanning from "../views/CreatePlanning";
+import ManagementMenuTasks from "../views/ManagementMenuTasks";
+import CreateTask from "../views/CreateTask";
+import ManagementMenuEvents from "../views/ManagementMenuEvents";
 
 const routes = [
   {
@@ -39,6 +42,18 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    path: '/planning/:id/menuTasks',
+    name: 'MenuTasks',
+    component: ManagementMenuTasks,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id/menuEvents',
+    name: 'MenuEvents',
+    component: ManagementMenuEvents,
+    meta: { requiresAuth: true }
+  },
+  {
     path: '/menuContacts',
     name: 'MenuContacts',
     component: ManagementMenuContacts,
@@ -54,6 +69,12 @@ const routes = [
     path: '/planning',
     name: 'planningCreate',
     component: CreatePlanning,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id/task',
+    name: 'TaskCreate',
+    component: CreateTask,
     meta: { requiresAuth: true }
   },
   {

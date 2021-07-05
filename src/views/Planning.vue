@@ -1,5 +1,7 @@
 <template>
   <div>
+    <router-link :to="{name: 'MenuTasks'}" class="btn btn-secondary bi bi-eye-fill"/>
+    <router-link :to="{name: 'MenuEvents'}" class="btn btn-secondary bi bi-eye-fill"/>
     <h5>EVENT</h5>
   <p v-for="(event, index) in events" :key="index">{{event}}</p>
     <h5>TASK</h5>
@@ -24,7 +26,9 @@ export default {
           console.log(data)
           this.updateAllEvents(data)
         })
-        .catch(() => {})
+        .catch(message => {
+          console.log(message)
+        })
     this.planningApi.getPlanningAllTasks(this.$route.params.id)
         .then(data => {
           // console.log(data)
