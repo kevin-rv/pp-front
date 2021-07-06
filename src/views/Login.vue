@@ -40,7 +40,7 @@ export default {
       api.login(this.email, this.password).then(token => {
         this.updateToken(token)
         if (token != null) {
-          this.$router.push({name: 'MenuPlanning'})
+          this.$router.push({name: 'MenuPlannings'})
         }
       }).catch((message) => {
         console.log(message)

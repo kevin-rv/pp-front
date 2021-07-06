@@ -1,7 +1,7 @@
 <template>
   <div>
-<!--    <router-link :to="{name: ''}" class="btn btn-secondary bi bi-plus-circle"/>-->
-    <p>Vos Tasks</p>
+    <router-link :to="{name: 'EventCreate'}" class="btn btn-secondary bi bi-plus-circle"/>
+    <p>Vos Events</p>
     <div class="card" v-for="(event, index) in events" :key="index">
       <div class="card-body">
         <h5 class="card-title">Special title treatment</h5>

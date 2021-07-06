@@ -7,6 +7,7 @@
         <h5 class="card-title">Special title treatment</h5>
         <p class="card-text">{{task}}</p>
         <a href="#" class="btn btn-secondary bi bi-eye-fill"></a>
+        <router-link :to="{name: 'TaskUpdate', params: { id: task.id }}" class="btn btn-secondary bi bi-tools"/>
         <a href="#" class="btn btn-secondary bi bi-tools"></a>
         <a href="#" class="btn btn-secondary bi bi-x-octagon"></a>
       </div>

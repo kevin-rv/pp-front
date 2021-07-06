@@ -30,6 +30,9 @@ export default createStore({
         UPDATE_ALL_CONTACT(state, contacts) {
             state.contacts = contacts;
         },
+        UPDATE_MESSAGE(state, message) {
+            state.message = message
+        }
     },
     actions: {
         updateToken({commit}, token) {
@@ -48,6 +51,9 @@ export default createStore({
         updateAllContacts({commit}, contacts) {
             commit('UPDATE_ALL_CONTACT', contacts)
         },
+        updateMessage({commit}, message) {
+            commit('UPDATE_MESSAGE', message)
+        }
     },
     getters: {
         token(state) {
@@ -74,6 +80,9 @@ export default createStore({
         allContacts(state) {
             return state.contacts
         },
+        message(state) {
+            return state.message
+        }
     },
     modules: {
 

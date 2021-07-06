@@ -2,14 +2,19 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Login from "../views/Login";
 import Signin from "../views/Signin";
-import ManagementMenuPlanning from "../views/ManagementMenuPlanning";
+import ManagementMenuPlanning from "../views/MenuPlannings/ManagementMenuPlanning";
 import store from '../store/index'
 import Planning from "../views/Planning";
-import ManagementMenuContacts from "../views/ManagementMenuContacts";
-import CreatePlanning from "../views/CreatePlanning";
-import ManagementMenuTasks from "../views/ManagementMenuTasks";
-import CreateTask from "../views/CreateTask";
-import ManagementMenuEvents from "../views/ManagementMenuEvents";
+import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
+import CreatePlanning from "../views/MenuPlannings/CreatePlanning";
+import ManagementMenuTasks from "../views/MenuTasks/ManagementMenuTasks";
+import CreateTask from "../views/MenuTasks/CreateTask";
+import ManagementMenuEvents from "../views/MenuEvents/ManagementMenuEvents";
+import CreateEvent from "../views/MenuEvents/CreateEvent";
+import CreateContact from "../views/MenuContacts/CreateContact";
+import UpdatePlanning from "../views/MenuPlannings/UpdatePlanning";
+import UpdateTask from "../views/MenuTasks/UpdateTask";
+import UpdateContact from "../views/MenuContacts/UpdateContact";
 
 const routes = [
   {
@@ -75,6 +80,41 @@ const routes = [
     path: '/planning/:id/task',
     name: 'TaskCreate',
     component: CreateTask,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id/event',
+    name: 'EventCreate',
+    component: CreateEvent,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contact',
+    name: 'ContactCreate',
+    component: CreateContact,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id',
+    name: 'PlanningUpdate',
+    component: UpdatePlanning,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contact/:id',
+    name: 'ContactUpdate',
+    component: UpdateContact,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id/task/:id',
+    name: 'TaskUpdate',
+    component: UpdateTask,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/planning/:id',
+    name: 'PlanningDelete',
     meta: { requiresAuth: true }
   },
   {

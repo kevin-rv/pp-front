@@ -1,14 +1,16 @@
 <template>
   <navbar/>
+  <message/>
   <router-view/>
   <Footer/>
 </template>
 <script>
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Message from "./components/message";
 export default {
   name: "Base",
-  components: {Footer, Navbar},
+  components: {Message, Footer, Navbar},
 }
 </script>
 <style lang="scss">

@@ -27,6 +27,18 @@ class planningApi
             .catch(this._errorManagement)
     }
 
+    createOneUser(name, email, password)
+    {
+        return axios
+            .post(this.rootPath + '/user', qs.stringify({name, email, password}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded'}}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
     createOnePlanning(name)
     {
         return axios
@@ -46,6 +58,34 @@ class planningApi
 
         return axios
             .post(this.rootPath + '/planning/' + id + '/task', qs.stringify({shortDescription, done, doneLimitDate}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    createOneEvent(id, shortDescription, fullDescription, startDatetime, endDatetime, contacts)
+    {
+
+        return axios
+            .post(this.rootPath + '/planning/' + id + '/event', qs.stringify({shortDescription, fullDescription, startDatetime, endDatetime, contacts}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    createOneContact(name, phoneNumber, home, birthday, email, relationship, work)
+    {
+
+        return axios
+            .post(this.rootPath + '/contact', qs.stringify({name, phoneNumber, home, birthday, email, relationship, work}), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -87,6 +127,59 @@ class planningApi
     getAllContact() {
         return axios
             .get(this.rootPath + '/contacts' , {headers: { 'authorization': 'Bearer ' + this.token }})
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    updatePlanning(id, name)
+    {
+        return axios
+            .patch(this.rootPath + '/planning/' + id , qs.stringify({name}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    updateContact(id, name, phoneNumber, home, birthday, email, relationship, work)
+    {
+        return axios
+            .patch(this.rootPath + '/contact/' + id , qs.stringify({name, phoneNumber, home, birthday, email, relationship, work}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+
+    updateTask(id, shortDescription, done, doneLimitDate)
+    {
+        return axios
+            .patch(this.rootPath + '/planning/' + id + '/task/'+ id, qs.stringify({id, shortDescription, done, doneLimitDate}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    deletePlanning(id)
+    {
+        return axios
+            .delete(this.rootPath + '/planning/' + id ,{headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
             .then((response) => {
                 return response.data
             })
