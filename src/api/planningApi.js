@@ -160,10 +160,10 @@ class planningApi
     }
 
 
-    updateTask(id, shortDescription, done, doneLimitDate)
+    updateTask(planningId, taskId, shortDescription, done, doneLimitDate)
     {
         return axios
-            .patch(this.rootPath + '/planning/' + id + '/task/'+ id, qs.stringify({id, shortDescription, done, doneLimitDate}), {headers: {
+            .patch(this.rootPath + '/planning/' + planningId + '/task/'+ taskId, qs.stringify({shortDescription, done, doneLimitDate}), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )

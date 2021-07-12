@@ -15,6 +15,8 @@ import CreateContact from "../views/MenuContacts/CreateContact";
 import UpdatePlanning from "../views/MenuPlannings/UpdatePlanning";
 import UpdateTask from "../views/MenuTasks/UpdateTask";
 import UpdateContact from "../views/MenuContacts/UpdateContact";
+import FirstLoginAddContact from "../views/FirstLoginAddContact";
+import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
 
 const routes = [
   {
@@ -34,6 +36,18 @@ const routes = [
     path: '/signin',
     name: 'Signin',
     component: Signin
+  },
+  {
+    path: '/firstLoginContact',
+    name: 'firstContact',
+    component: FirstLoginAddContact,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/firstLoginUpdateUser',
+    name: 'firstUser',
+    component: firstLoginUpdateUser,
+    meta: { requiresAuth: true }
   },
   {
     path: '/login',
@@ -107,9 +121,13 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/planning/:id/task/:id',
+    path: '/planning/:planningId/task/:taskId',
     name: 'TaskUpdate',
     component: UpdateTask,
+    props: route => ({
+      taskId: route.params.taskId,
+      planningId: route.params.planningId,
+    }),
     meta: { requiresAuth: true }
   },
   {

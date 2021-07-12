@@ -1,5 +1,6 @@
 <template>
   <p></p>
+  <b-button v-b-popover.hover.top="'My first'" ></b-button>
 </template>
 
 <script>

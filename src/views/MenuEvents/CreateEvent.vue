@@ -7,11 +7,11 @@
           <form class="row g-3 justify-content-center mt-1">
             <div class="col-auto">
               <label>Short Description</label>
-              <input type="text" v-model="shortDescription">
+              <input type="text" class="form-control" v-model="shortDescription">
             </div>
-            <div class="col-auto">
+            <div class="col-auto text-center">
               <label>Full Description</label>
-              <textarea type="text" v-model="fullDescription"></textarea>
+              <textarea type="text" rows="8" cols="40" v-model="fullDescription"></textarea>
             </div>
               <div class="input-group date">
                 <input type="datetime-local" class="form-control" v-model="startDatetime">

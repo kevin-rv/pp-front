@@ -58,7 +58,7 @@ export default {
     submit() {
       this.planningApi.createOneTask(this.$route.params.id, this.shortDescription, this.done, this.doneLimitDate)
           .then(() => {
-            this.$router.push({name: 'MenuTasks'})
+            this.$router.push({name: 'MenuTasks', params: {id: this.$route.params.id}})
           })
           .catch(message => {
             console.log(message)

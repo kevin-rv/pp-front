@@ -5,7 +5,10 @@
         <div class="card-body">
           <h5 class="card-title text-center">Menu Contact <router-link :to="{name: 'ContactCreate'}" class="btn btn-secondary bi bi-plus-circle"/></h5>
 <!--          <router-link :to="{name: 'ContactCreate'}" class="btn btn-secondary bi bi-plus-circle"/>-->
-          <p v-for="(contact, index) in contacts" :key="index">{{contact.name}} <router-link :to="{name: 'ContactUpdate', params: { id: contact.id }}" class="btn btn-secondary bi bi-tools"/></p>
+<!--          <p v-for="(contact, index) in contacts" :key="index">{{contact.name}} <router-link :to="{name: 'ContactUpdate', params: { id: contact.id }}" class="btn btn-secondary bi bi-tools"/></p>-->
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">{{contact.name}} <router-link :to="{name: 'ContactUpdate', params: { id: contact.id }}" class="btn btn-secondary bi bi-tools"/> </li>
+          </ul>
         </div>
       </div>
     </div>

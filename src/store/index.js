@@ -82,6 +82,17 @@ export default createStore({
         },
         message(state) {
             return state.message
+        },
+        task: (state) => (taskId) => {
+            taskId = parseInt(taskId, 10);
+            let task = null;
+            state.tasks.forEach((value) => {
+                if (value.id === taskId) {
+                    task = value;
+                }
+            })
+
+            return task;
         }
     },
     modules: {

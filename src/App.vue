@@ -1,16 +1,17 @@
 <template>
   <navbar/>
-  <message/>
-  <router-view/>
+  <div class="container p-0 min-vh-100">
+    <router-view/>
+  </div>
   <Footer/>
 </template>
 <script>
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Message from "./components/message";
+
 export default {
   name: "Base",
-  components: {Message, Footer, Navbar},
+  components: { Footer, Navbar},
 }
 </script>
 <style lang="scss">
@@ -27,23 +28,13 @@ html {
 #app {
   //text-align: center;
   color: #2c3e50;
+  background-color: #80ced6;
+  background-image: url("../public/img/triangle_background.jpg");
+  background-size: cover;
 }
 #footer {
-  background: darkgrey;
+  background: #454140;
   text-align: center;
-  margin-top: 50px;
-}
-#nav {
-  padding: 10px;
-  background: darkgrey;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: red;
-    }
-  }
+  color: white;
 }
 </style>

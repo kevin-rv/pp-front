@@ -1,7 +1,7 @@
 <template>
   <div>
-    <router-link :to="{name: 'MenuTasks'}" class="btn btn-secondary bi bi-eye-fill"/>
-    <router-link :to="{name: 'MenuEvents'}" class="btn btn-secondary bi bi-eye-fill"/>
+    <router-link :to="{name: 'MenuTasks'}" class="btn btn-secondary">Task</router-link>
+    <router-link :to="{name: 'MenuEvents'}" class="btn btn-secondary">Event</router-link>
     <h5>EVENT</h5>
   <p v-for="(event, index) in events" :key="index">{{event}}</p>
     <h5>TASK</h5>

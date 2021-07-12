@@ -39,7 +39,7 @@ export default {
     submit() {
       this.planningApi.createOnePlanning(this.name)
           .then(() => {
-            this.$router.push({name: 'MenuPlannings'})
+            this.$router.push({name: 'MenuPlanning'})
           })
           .catch(message => {
             console.log(message)
