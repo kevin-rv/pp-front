@@ -6,13 +6,11 @@ import ManagementMenuPlanning from "../views/MenuPlannings/ManagementMenuPlannin
 import store from '../store/index'
 import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
-import CreatePlanning from "../views/MenuPlannings/CreatePlanning";
 import ManagementMenuTasks from "../views/MenuTasks/ManagementMenuTasks";
 import CreateTask from "../views/MenuTasks/CreateTask";
 import ManagementMenuEvents from "../views/MenuEvents/ManagementMenuEvents";
 import CreateEvent from "../views/MenuEvents/CreateEvent";
 import CreateContact from "../views/MenuContacts/CreateContact";
-import UpdatePlanning from "../views/MenuPlannings/UpdatePlanning";
 import UpdateTask from "../views/MenuTasks/UpdateTask";
 import UpdateContact from "../views/MenuContacts/UpdateContact";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
@@ -85,12 +83,6 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/planning',
-    name: 'planningCreate',
-    component: CreatePlanning,
-    meta: { requiresAuth: true }
-  },
-  {
     path: '/planning/:id/task',
     name: 'TaskCreate',
     component: CreateTask,
@@ -106,12 +98,6 @@ const routes = [
     path: '/contact',
     name: 'ContactCreate',
     component: CreateContact,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/planning/:id',
-    name: 'PlanningUpdate',
-    component: UpdatePlanning,
     meta: { requiresAuth: true }
   },
   {

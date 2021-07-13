@@ -12,8 +12,14 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
-          <button type="button" class="btn btn-primary" v-if="actionFunc && actionText" @click="actionFunc">{{ actionText }}</button>
+          <slot name="footer"></slot>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button"
+                  class="btn"
+                  :class="buttonActionClass"
+                  v-if="actionFunc && actionText"
+                  @click="actionFunc">{{ actionText }}
+          </button>
         </div>
       </div>
     </div>
@@ -35,7 +41,13 @@ export default {
     actionText: {
       required: false,
       type: String,
+    },
+    buttonActionClass: {
+      required: false,
+      type: String,
+      default: 'btn-primary'
     }
+
   },
 }
 </script>
