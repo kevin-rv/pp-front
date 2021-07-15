@@ -1,19 +1,22 @@
 <template>
   <div>
-    <router-link :to="{name: 'MenuTasks'}" class="btn btn-secondary">Task</router-link>
-    <router-link :to="{name: 'MenuEvents'}" class="btn btn-secondary">Event</router-link>
-    <h5>EVENT</h5>
-  <p v-for="(event, index) in events" :key="index">{{event}}</p>
-    <h5>TASK</h5>
-  <p v-for="(task, index) in tasks" :key="index">{{task}}</p>
+<!--    <router-link :to="{name: 'MenuTasks'}" class="btn btn-secondary">Task</router-link>-->
+<!--    <router-link :to="{name: 'MenuEvents'}" class="btn btn-secondary">Event</router-link>-->
+<!--    <h5>EVENT</h5>-->
+<!--  <p v-for="(event, index) in events" :key="index">{{event}}</p>-->
+<!--    <h5>TASK</h5>-->
+<!--  <p v-for="(task, index) in tasks" :key="index">{{task}}</p>-->
+    <card-planning></card-planning>
   </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
+import CardPlanning from "../components/CardPlanning";
 
 export default {
   name: "Planning",
+  components: {CardPlanning},
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'})
   },
