@@ -173,6 +173,20 @@ class planningApi
             .catch(this._errorManagement)
     }
 
+
+    updateEvent(planningId, event)
+    {
+        return axios
+            .patch(this.rootPath + '/planning/' + planningId + '/event/'+ event.id, qs.stringify(event), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
     deletePlanning(id)
     {
         return axios
