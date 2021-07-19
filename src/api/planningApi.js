@@ -200,6 +200,18 @@ class planningApi
             .catch(this._errorManagement)
     }
 
+    deleteEvent(planningId, event)
+    {
+        return axios
+            .delete(this.rootPath + '/planning/' + planningId + '/event/' + event ,{headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
 
     _errorManagement(error)
     {

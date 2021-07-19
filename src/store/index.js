@@ -11,7 +11,7 @@ export default createStore({
         tasks:[],
         plannings: [],
         contacts: [],
-        message: [],
+        messages: [],
     },
     mutations: {
         UPDATE_TOKEN(state, token) {
@@ -80,7 +80,7 @@ export default createStore({
         allContacts(state) {
             return state.contacts
         },
-        message(state) {
+        messages(state) {
             return state.message
         },
         task: (state) => (taskId) => {

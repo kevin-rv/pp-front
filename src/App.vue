@@ -1,5 +1,6 @@
 <template>
   <navbar/>
+  <alert/>
   <div class="container p-0 min-vh-100">
     <router-view/>
   </div>
@@ -8,10 +9,11 @@
 <script>
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Alert from "./components/Alert";
 
 export default {
   name: "Base",
-  components: { Footer, Navbar},
+  components: {Alert, Footer, Navbar},
 }
 </script>
 <style lang="scss">
