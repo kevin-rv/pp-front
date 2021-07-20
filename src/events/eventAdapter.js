@@ -136,16 +136,6 @@ class EventAdapter {
 
         return translatedEvent
     }
-
-    static adaptCreateFullCalendarEvent(event)
-    {
-        let translatedEvent = {}
-        translatedEvent.shortDescription = event.title
-        translatedEvent.startDatetime = this._dateConvertCleanUp(event.start)
-        translatedEvent.endDatetime = this._dateConvertCleanUp(event.end)
-        translatedEvent.fullDescription = event.extendedProps.fullDescription
-        return translatedEvent
-    }
 }
 
 export default EventAdapter;

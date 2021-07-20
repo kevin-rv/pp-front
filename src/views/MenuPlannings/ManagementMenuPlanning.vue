@@ -66,7 +66,7 @@ export default {
     ...mapGetters({planningApi: 'planningApi', plannings: 'allPlannings'})
   },
   methods: {
-    ...mapActions({updateAllPlannings: 'updateAllPlannings'}),
+    ...mapActions({updateAllPlannings: 'updateAllPlannings', addMessage: 'addMessage'}),
     updated() {
       this.planningApi.getAllPlannings()
           .then(data => {
@@ -100,6 +100,10 @@ export default {
           })
           .catch(message => {
             console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
     },
     updatePlanning() {
@@ -111,6 +115,10 @@ export default {
           })
           .catch(message => {
             console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
           .finally(() => {
             this.name = ''
@@ -126,6 +134,10 @@ export default {
           })
           .catch(message => {
             console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
     },
   },
@@ -134,7 +146,11 @@ export default {
         .then(data => {
           this.updateAllPlannings(data)
         })
-        .catch(() => {
+        .catch(message => {
+          this.addMessage({
+            message: message,
+            type: 'danger'
+          })
         })
   },
 }

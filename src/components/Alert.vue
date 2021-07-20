@@ -1,9 +1,7 @@
 <template>
-  <div>
-    <div v-for="(message, index) in messages" :key="index" :class="messageClass(message)" role="alert">
-      {{message}}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">x</span></button>
-    </div>
+  <div :class="messageClass()" role="alert" ref="alert">
+    {{ message.message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" ref="close"></button>
   </div>
 </template>
 
@@ -12,18 +10,33 @@ import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "Alert",
+  data: () => ({}),
+  props: {
+    message: {
+      required: true,
+      type: Object,
+    }
+  },
   computed: {
     ...mapGetters({planningApi: 'planningApi', messages: 'messages'})
   },
   methods: {
-    ...mapActions ({updateAllMessage: 'updateMessage'}),
-    messageClass: function (message) {
-      return 'alert alert-' + message.type
-    }
+    ...mapActions({removeMessage: 'removeMessage'}),
+    messageClass: function () {
+      return 'alert alert-dismissible fade show alert-' + this.message.type
+    },
+    onModalClosed: function () {
+      this.removeMessage(this.message)
+    },
   },
+  mounted() {
+    this.$refs.alert.addEventListener('closed.bs.alert', this.onModalClosed)
+    setTimeout(() => {
+      this.$refs.close.dispatchEvent(new MouseEvent('click'))
+    }, this.message.timeout || 5000)
+  },
+  beforeUnmount() {
+    this.$refs.alert.removeEventListener('closed.bs.alert', this.onModalClosed)
+  }
 }
 </script>
-
-<style scoped>
-
-</style>

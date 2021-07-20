@@ -30,8 +30,16 @@ export default createStore({
         UPDATE_ALL_CONTACT(state, contacts) {
             state.contacts = contacts;
         },
-        UPDATE_MESSAGE(state, message) {
-            state.message = message
+        ADD_MESSAGE(state, message) {
+            state.messages.push(message)
+        },
+        REMOVE_MESSAGE(state, message) {
+            let index = state.messages.indexOf(message)
+            if (index < 0) {
+                return
+            }
+
+            state.messages.splice(index, 1)
         }
     },
     actions: {
@@ -51,8 +59,11 @@ export default createStore({
         updateAllContacts({commit}, contacts) {
             commit('UPDATE_ALL_CONTACT', contacts)
         },
-        updateMessage({commit}, message) {
-            commit('UPDATE_MESSAGE', message)
+        addMessage({commit}, message) {
+            commit('ADD_MESSAGE', message)
+        },
+        removeMessage({commit}, message) {
+           commit('REMOVE_MESSAGE', message)
         }
     },
     getters: {
@@ -81,7 +92,7 @@ export default createStore({
             return state.contacts
         },
         messages(state) {
-            return state.message
+            return state.messages
         },
         task: (state) => (taskId) => {
             taskId = parseInt(taskId, 10);

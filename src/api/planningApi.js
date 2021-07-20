@@ -67,11 +67,10 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    createOneEvent(id, shortDescription, fullDescription, startDatetime, endDatetime, contacts)
+    createOneEvent(planningId, event)
     {
-
         return axios
-            .post(this.rootPath + '/planning/' + id + '/event', qs.stringify({shortDescription, fullDescription, startDatetime, endDatetime, contacts}), {headers: {
+            .post(this.rootPath + '/planning/' + planningId + '/event', qs.stringify(event), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -200,10 +199,10 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    deleteEvent(planningId, event)
+    deleteEvent(planningId, eventId)
     {
         return axios
-            .delete(this.rootPath + '/planning/' + planningId + '/event/' + event ,{headers: {
+            .delete(this.rootPath + '/planning/' + planningId + '/event/' + eventId ,{headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )

@@ -1,41 +1,30 @@
 <template>
-<!--            CREATE EVENT -->
   <modal
-      title="Create Event"
-      ref="modalCreateEvent"
-      :action-func="eventAdd"
+      :title="modalCreateUpdateEventTitle"
+      ref="modalCreateUpdateEvent"
+      :action-func="modalCreateUpdateEventAction"
       action-text="Save"
       button-action-class="btn-info text-white"
   >
-    <label>Short Description</label>
-    <input type="text" class="form-control" v-model="shortDescription">
-
-    <label>Full Description</label>
-    <textarea type="text" rows="8" cols="40" v-model="fullDescription"></textarea>
-
-    <input type="datetime-local" v-model="startDatetime">
-    <input type="datetime-local" v-model="endDatetime">
+    <template v-if="modalCreateUpdateEventDeleteIsActive" v-slot:header><button type="button" class=" btn bi-trash" @click="openModalDeleteEvent"></button></template>
+    <div class="mb-3">
+      <label class="form-label">Short Description</label>
+      <input type="text" class="form-control" v-model="shortDescription">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Full Description</label>
+      <textarea type="text" rows="8" class="form-control" v-model="fullDescription"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Event start</label>
+      <input type="datetime-local" class="form-control" v-model="startDatetime">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Event end</label>
+      <input type="datetime-local" class="form-control" v-model="endDatetime">
+    </div>
   </modal>
 
-<!--                UPDATE EVENT -->
-  <modal
-      title="Update Event"
-      ref="modalUpdateEvent"
-      :action-func="eventUpdate"
-      action-text="Save"
-      button-action-class="btn-info text-white"
-  >
-    <template v-slot:header><button type="button" class=" btn bi-trash" @click="openModalDeleteEvent"></button></template>
-    <label>Short Description</label>
-    <input type="text" class="form-control" v-model="shortDescription">
-
-    <label>Full Description</label>
-    <textarea type="text" rows="8" cols="40" v-model="fullDescription"></textarea>
-
-    <input type="datetime-local" v-model="startDatetime">
-    <input type="datetime-local" v-model="endDatetime">
-  </modal>
-<!--                  DELETE EVENT -->
   <modal
       title="Delete Event"
       ref="modalDeleteEvent"
@@ -44,7 +33,6 @@
       button-action-class="btn-danger"
   >
     <slot><p>This action is definitive</p></slot>
-
   </modal>
 
   <div style="background-color: white">
@@ -76,7 +64,9 @@ export default {
     fullDescription: '',
     startDatetime: null,
     endDatetime: null,
-    eventToUpdate: {},
+    modalCreateUpdateEventTitle: '',
+    modalCreateUpdateEventAction: () => {},
+    modalCreateUpdateEventDeleteIsActive: false,
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
@@ -93,6 +83,7 @@ export default {
         plugins: [ dayGridPlugin, timeGrid, interactionPlugin, bootstrapPlugin, listPlugin ],
         initialView: 'timeGridWeek',
         locale: 'fr',
+        allDaySlot: false,
         headerToolbar: {
           center: 'title',
           right: 'prev,next today',
@@ -100,7 +91,7 @@ export default {
         },
         selectable: true ,
         firstDay: 1 ,
-        // themeSystem: 'bootstrap', // TODO Revoir le theme
+        // themeSystem: 'bootstrap',
         timeZone: 'local',
         nowIndicator: true,
         events: this.fullcalendarCompatibleEvents,
@@ -108,32 +99,36 @@ export default {
         navLinks: true,
         weekNumbers: true,
         dayMaxEvents: true,
-        eventAdd: function () {console.log(arguments)},
         eventChange: this.eventChange,
-        eventRemove: this.removeEvent,
-        eventClick: this.eventClick,
-        dateClick: this.handleDateClick ,
+        eventClick: this.openModalUpdateEvent,
+        dateClick: this.openModalCreateNewEvent ,
         eventDidMount: this.eventDidMount,
       }
     }
   },
   methods: {
-    ...mapActions({updateAllPlannings: 'updateAllPlannings',updateAllEvents: 'updateAllEvents', updateAllTasks: 'updateAllTasks'}),
+    ...mapActions({
+      updateAllPlannings: 'updateAllPlannings',
+      updateAllEvents: 'updateAllEvents',
+      updateAllTasks: 'updateAllTasks',
+      addMessage: 'addMessage'
+    }),
     updated() {
       this.planningApi.getPlanningAllEvents(this.$route.params.id)
           .then(data => {
-            console.log(data)
             this.updateAllEvents(data)
           })
           .catch(() => {})
     },
     eventChange: function (info) {
-      console.log(info)
       let event = EventAdapter.adaptFromFullCalendarEvent(info.event)
 
       this.planningApi.updateEvent(this.$route.params.id, event)
           .catch(message => {
-            console.log(message) // TODO add visual error message please!!! (marc)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
             info.revert()
           })
     },
@@ -145,26 +140,85 @@ export default {
         startDatetime: moment(this.startDatetime).format(),
         endDatetime: moment(this.endDatetime).format(),
       }
-
       console.log(event)
-
       this.planningApi.updateEvent(this.$route.params.id, event)
           .then(() => {
             this.updated()
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalUpdateEvent.$el)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
             modal.hide()
           })
           .catch(message => {
-            console.log(message) // TODO add visual error message please!!! (marc)
-            alert(message)
+            console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
-          .finally(() => {
-            this.shortDescription = ''
-            this.fullDescription = ''
-            this.startDatetime = null
-            this.endDatetime = null
+    },
+    openModalUpdateEvent: function(info) {
+      this.eventId = info.event.id
+      this.shortDescription = info.event.title
+      this.fullDescription = info.event.extendedProps.fullDescription
+      this.startDatetime = moment(info.event.start).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
+      this.endDatetime = moment(info.event.end).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
 
+      this.modalCreateUpdateEventTitle = 'Update Event'
+      this.modalCreateUpdateEventAction = this.eventUpdate
+      this.modalCreateUpdateEventDeleteIsActive = true;
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+      modal.show()
+    },
+    eventAdd: function() {
+      let event = {
+        shortDescription: this.shortDescription,
+        fullDescription: this.fullDescription,
+        startDatetime: moment(this.startDatetime).format(),
+        endDatetime: moment(this.endDatetime).format(),
+      }
+      console.log(event)
+      this.planningApi.createOneEvent(this.$route.params.id, event)
+          .then(() => {
+            this.updated()
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+            modal.hide()
           })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    openModalCreateNewEvent: function () {
+      this.shortDescription = ''
+      this.fullDescription = ''
+      this.startDatetime = null
+      this.endDatetime = null
+
+      this.modalCreateUpdateEventTitle = 'Create Event'
+      this.modalCreateUpdateEventAction = this.eventAdd
+      this.modalCreateUpdateEventDeleteIsActive = false;
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+      modal.show()
+    },
+    removeEvent: function () {
+      this.planningApi.deleteEvent(this.$route.params.id ,this.eventId)
+          .then(() => {
+            console.log(this.$refs)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
+            modal.hide()
+            modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+            modal.hide()
+            this.updated()
+          })
+          .catch(message => {
+            console.log(message)
+          })
+
+    },
+    openModalDeleteEvent() {
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
+      modal.show()
     },
     eventDidMount: function(info) {
       new this.$bootstrap.Tooltip(info.el, {   // TODO Tooltip à revoir
@@ -172,84 +226,27 @@ export default {
         delay: { show: 500, hide: 100 }
       });
     },
-    eventAdd: function(info) {
-      // TODO problème quand on créer un event les infos du dernier update se mette dedans
-      console.log({
-        shortDescription: this.shortDescription,
-        fullDescription: this.fullDescription,
-        startDatetime: this.startDatetime,
-        endDatetime: this.endDatetime,
-      })
-      let event = EventAdapter.adaptCreateFullCalendarEvent(info.event)
-      this.planningApi.createOneEvent(this.$route.params.id, event)
-          .then(() => {
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateEvent.$el)
-            modal.hide()
-          })
-          .catch(message => {
-            console.log(message)
-            alert(message)
-          })
-
-    },
-    handleDateClick: function () {
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateEvent.$el)
-      modal.show()
-    },
-    eventClick: function(info) {
-      this.eventId = info.event.id
-      this.shortDescription = info.event.title
-      this.fullDescription = info.event.extendedProps.fullDescription
-      this.startDatetime = moment(info.event.start).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
-      this.endDatetime = moment(info.event.end).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
-
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalUpdateEvent.$el)
-      modal.show()
-    },
-    removeEvent: function () {
-      console.log('remove event')
-      // this.calendarOptions.events = {} TODO regler probleme
-      // console.log(this.$refs.calendar.getApi())
-      // let event = EventAdapter.adaptFromFullCalendarEvent(info.event)
-      //
-      // this.planningApi.deletePlanning(this.$route.params.id, event)
-      //     .then(() => {
-      //       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeletePlanning.$el)
-      //       modal.hide()
-      //     })
-      //     .catch(message => {
-      //       console.log(message)
-      //     })
-
-    },
-
-    openModalDeleteEvent() {
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
-      modal.show()
-    }
   },
   beforeMount() {
     this.planningApi.getPlanningAllEvents(this.$route.params.id)
         .then(data => {
-          console.log(data)
           this.updateAllEvents(data)
         })
         .catch(message => {
           console.log(message)
+          this.addMessage({
+            message: 'event not found',
+            type: 'warning'
+          })
         })
     this.planningApi.getPlanningAllTasks(this.$route.params.id)
         .then(data => {
-          // console.log(data)
           this.updateAllTasks(data)
         })
         .catch(() => {})
   },
-  mounted() {
-    this.removeEvent()
-  }
 }
 </script>
 
 <style scoped>
-
 </style>

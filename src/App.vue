@@ -1,6 +1,6 @@
 <template>
   <navbar/>
-  <alert/>
+  <alert-center/>
   <div class="container p-0 min-vh-100">
     <router-view/>
   </div>
@@ -9,11 +9,11 @@
 <script>
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Alert from "./components/Alert";
+import AlertCenter from "./components/AlertCenter";
 
 export default {
   name: "Base",
-  components: {Alert, Footer, Navbar},
+  components: {AlertCenter, Footer, Navbar},
 }
 </script>
 <style lang="scss">
