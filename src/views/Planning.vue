@@ -13,7 +13,7 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Full Description</label>
-      <textarea type="text" rows="8" class="form-control" v-model="fullDescription"></textarea>
+      <textarea type="text" rows="6" class="form-control" v-model="fullDescription"></textarea>
     </div>
     <div class="mb-3">
       <label class="form-label">Event start</label>
@@ -86,7 +86,7 @@ export default {
         allDaySlot: false,
         headerToolbar: {
           center: 'title',
-          right: 'prev,next today',
+          right: 'prevYear,prev,today,next,nextYear',
           left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
         },
         selectable: true ,
@@ -103,6 +103,24 @@ export default {
         eventClick: this.openModalUpdateEvent,
         dateClick: this.openModalCreateNewEvent ,
         eventDidMount: this.eventDidMount,
+        stickyHeaderDates: 'true',
+        slotEventOverlap: true,
+        views: {
+          month: {
+            columnFormat:'dddd'
+          },
+          agendaWeek:{
+            columnFormat:'ddd D/M',
+            eventLimit: false
+          },
+          agendaDay:{
+            columnFormat:'dddd',
+            eventLimit: false
+          },
+          listWeek:{
+            columnFormat:''
+          }
+        },
       }
     }
   },

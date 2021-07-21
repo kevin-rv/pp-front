@@ -1,0 +1,44 @@
+.fc .fc-button-primary {
+  //background-color: #dc3545 !important;
+  background-color: #158cba !important;
+  color: #fff !important;
+}
+
+.fc .fc-button-primary:hover {
+
+  background-color: #106a8c !important;
+  color: #fff !important;
+}
+
+a {
+  color: #2c3e50 !important;
+}
+
+.fc .fc-button:disabled {
+  //background-color: black !important;
+  background-color: #106a8c !important;
+  color: #fff !important;
+  opacity: 1 !important;
+}
+.fc .fc-button-primary:not(:disabled):active, .fc .fc-button-primary:not(:disabled).fc-button-active {
+  background-color: #106a8c !important;
+  color: #fff !important;
+
+}
+
+//.fc .fc-daygrid-day.fc-day-today {
+//  background-color: rgba(208, 208, 208, 0.3) !important;
+//
+//}
+
+.fc .fc-day-today {
+  background-color: rgba(208, 208, 208, 0.3) !important;
+}
+
+//.fc-scrollgrid-sync-inner {
+//  background-color: #fff;
+//}
+
+.fc-col-header-cell-cushion {
+  color: #2c3e50 !important;
+}

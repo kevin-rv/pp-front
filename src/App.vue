@@ -20,6 +20,8 @@ export default {
 @font-face {
 }
 
+@import "assets/styles/app";
+
 html {
   font-family: 'Choco cooky', sans-serif;
   font-style: normal;
