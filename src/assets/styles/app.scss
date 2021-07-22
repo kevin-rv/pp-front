@@ -10,9 +10,6 @@
   color: #fff !important;
 }
 
-a {
-  color: #2c3e50 !important;
-}
 
 .fc .fc-button:disabled {
   //background-color: black !important;
@@ -26,19 +23,76 @@ a {
 
 }
 
-//.fc .fc-daygrid-day.fc-day-today {
+//.fc fc-daygrid-day fc-day-today {
 //  background-color: rgba(208, 208, 208, 0.3) !important;
 //
 //}
 
+$backgroundOfTheDay: rgba(208, 208, 208, 0.3) !important;
+
 .fc .fc-day-today {
-  background-color: rgba(208, 208, 208, 0.3) !important;
+  background-color: $backgroundOfTheDay;
+  .fc-daygrid-day-frame {
+    background-color: $backgroundOfTheDay;
+  }
 }
 
-//.fc-scrollgrid-sync-inner {
-//  background-color: #fff;
-//}
+th .fc-scrollgrid-sync-inner:not(a) {
+  background-color: $backgroundOfTheDay;
+}
 
 .fc-col-header-cell-cushion {
   color: #2c3e50 !important;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-top: 0.5rem !important;
+}
+
+.fc-col-header-cell-cushion:hover {
+  text-decoration: none !important;
+}
+
+.fc-daygrid-day-number {
+  text-decoration: none;
+}
+.fc-daygrid-day-number:hover {
+  text-decoration: none !important ;
+}
+
+.fc-daygrid-week-number {
+  text-decoration: none;
+}
+.fc-daygrid-week-number:hover {
+  text-decoration: none !important;
+}
+.fc-daygrid-day-frame {
+  background-color: #fff;
+}
+
+.fc-toolbar-title {
+  text-transform: uppercase;
+}
+
+.fc .fc-toolbar {
+  flex-wrap: wrap;
+}
+
+.fc-list-day-text {
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.fc-list-day-side-text {
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.fc-popover-body
+
+{
+  background-color: #fff;
+}
+
+.fc-day-sun a {
+  color: red !important;
 }

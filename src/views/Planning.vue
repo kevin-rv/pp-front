@@ -36,7 +36,7 @@
   </modal>
 
   <div style="background-color: white">
-    <full-calendar :options="calendarOptions" ref="calendar"/>
+    <full-calendar :options="calendarOptions" ref="calendar" id="full-calendar"/>
   </div>
 </template>
 
@@ -104,22 +104,32 @@ export default {
         dateClick: this.openModalCreateNewEvent ,
         eventDidMount: this.eventDidMount,
         stickyHeaderDates: 'true',
-        slotEventOverlap: true,
+        slotEventOverlap: false,
+        weekText: 'S',
+        buttonText: {
+          today:    "Aujourd'hui",
+          month:    'Mois',
+          week:     'Semaine',
+          day:      'Jour',
+          list:     'Liste'
+        },
+        slotLabelFormat: {
+          hour: 'numeric',
+          minute: '2-digit',
+        },
         views: {
-          month: {
-            columnFormat:'dddd'
+          dayGridMonth: { // name of view
+            dayHeaderContent: (args) => {
+              moment.locale('fr');
+              return moment(args.date).format('dddd')
+            }
           },
-          agendaWeek:{
-            columnFormat:'ddd D/M',
-            eventLimit: false
+          timeGridWeek: { // name of view
+              dayHeaderContent: (args) => {
+                moment.locale('fr');
+                return moment(args.date).format('dddd Do')
+              }
           },
-          agendaDay:{
-            columnFormat:'dddd',
-            eventLimit: false
-          },
-          listWeek:{
-            columnFormat:''
-          }
         },
       }
     }
@@ -207,11 +217,11 @@ export default {
             })
           })
     },
-    openModalCreateNewEvent: function () {
+    openModalCreateNewEvent: function (dateClick) {
       this.shortDescription = ''
       this.fullDescription = ''
-      this.startDatetime = null
-      this.endDatetime = null
+      this.startDatetime = moment(dateClick.date).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
+      this.endDatetime = moment(dateClick.date).add(30, 'minutes').utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
 
       this.modalCreateUpdateEventTitle = 'Create Event'
       this.modalCreateUpdateEventAction = this.eventAdd
@@ -266,5 +276,12 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+#full-calendar a {
+  color: #2c3e50;
+}
+
+#full-calendar button {
+  text-transform: uppercase;
+}
 </style>
