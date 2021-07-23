@@ -96,3 +96,12 @@ th .fc-scrollgrid-sync-inner:not(a) {
 .fc-day-sun a {
   color: red !important;
 }
+
+.fc .fc-bg-event {
+  background-color: red !important;
+  opacity: 0.2 !important;
+  color: black;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+}

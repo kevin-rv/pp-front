@@ -53,6 +53,8 @@ import {mapActions, mapGetters} from "vuex";
 import EventAdapter from "../events/eventAdapter";
 import Modal from "../components/Modal";
 import moment from 'moment'
+import PublicHolidayApi from "../api/publicHolidayApi";
+
 
 
 export default {
@@ -67,6 +69,7 @@ export default {
     modalCreateUpdateEventTitle: '',
     modalCreateUpdateEventAction: () => {},
     modalCreateUpdateEventDeleteIsActive: false,
+    holidays: [],
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
@@ -76,7 +79,7 @@ export default {
         events.push(EventAdapter.adaptToFullCalendarEvent(value))
       })
 
-      return events
+      return events.concat(this.holidays)
     },
     calendarOptions: function () {
       return {
@@ -102,7 +105,7 @@ export default {
         eventChange: this.eventChange,
         eventClick: this.openModalUpdateEvent,
         dateClick: this.openModalCreateNewEvent ,
-        eventDidMount: this.eventDidMount,
+        eventDidMount: this.attachTooltip,
         stickyHeaderDates: 'true',
         slotEventOverlap: false,
         weekText: 'S',
@@ -125,10 +128,10 @@ export default {
             }
           },
           timeGridWeek: { // name of view
-              dayHeaderContent: (args) => {
-                moment.locale('fr');
-                return moment(args.date).format('dddd Do')
-              }
+            dayHeaderContent: (args) => {
+              moment.locale('fr');
+              return moment(args.date).format('dddd Do')
+            }
           },
         },
       }
@@ -168,7 +171,6 @@ export default {
         startDatetime: moment(this.startDatetime).format(),
         endDatetime: moment(this.endDatetime).format(),
       }
-      console.log(event)
       this.planningApi.updateEvent(this.$route.params.id, event)
           .then(() => {
             this.updated()
@@ -248,12 +250,32 @@ export default {
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
       modal.show()
     },
-    eventDidMount: function(info) {
+    attachTooltip: function(info) {
+      if (!info.event.extendedProps.fullDescription) {
+        return
+      }
       new this.$bootstrap.Tooltip(info.el, {   // TODO Tooltip à revoir
         title: info.event.extendedProps.fullDescription,
         delay: { show: 500, hide: 100 }
       });
     },
+    prepareHolidays: function () {
+      let ph = new PublicHolidayApi();
+      ph.getHolidays()
+          .then(holidays => {
+            let holidayEvents = []
+            holidays.forEach(holiday => {
+              holidayEvents.push(EventAdapter.adaptHolidayToFullCalendarEvent(holiday))
+            })
+            this.holidays = holidayEvents
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'warning'
+            })
+          })
+    }
   },
   beforeMount() {
     this.planningApi.getPlanningAllEvents(this.$route.params.id)
@@ -261,9 +283,8 @@ export default {
           this.updateAllEvents(data)
         })
         .catch(message => {
-          console.log(message)
           this.addMessage({
-            message: 'event not found',
+            message: message,
             type: 'warning'
           })
         })
@@ -271,7 +292,11 @@ export default {
         .then(data => {
           this.updateAllTasks(data)
         })
-        .catch(() => {})
+        .catch(() => {
+
+        })
+    this.prepareHolidays()
+
   },
 }
 </script>

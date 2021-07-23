@@ -40,7 +40,8 @@ export default createStore({
             }
 
             state.messages.splice(index, 1)
-        }
+        },
+
     },
     actions: {
         updateToken({commit}, token) {

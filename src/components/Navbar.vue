@@ -32,6 +32,7 @@ export default {
   a {
     font-weight: bold;
     color: white;
+    text-decoration: none;
 
     &.router-link-exact-active {
       color: red;
