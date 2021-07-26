@@ -35,8 +35,10 @@
     <slot><p>This action is definitive</p></slot>
   </modal>
 
+  <popover :title="shortDescription" :content="fullDescription + startDatetime + endDatetime"></popover>
+
   <div style="background-color: white">
-    <full-calendar :options="calendarOptions" ref="calendar" id="full-calendar"/>
+    <full-calendar :options="calendarOptions" data-bs-toggle="popover" ref="calendar" id="full-calendar"/>
   </div>
 </template>
 
@@ -54,12 +56,14 @@ import EventAdapter from "../events/eventAdapter";
 import Modal from "../components/Modal";
 import moment from 'moment'
 import PublicHolidayApi from "../api/publicHolidayApi";
+import Popover from "../components/Popover"
+
 
 
 
 export default {
   name: "Planning",
-  components: {Modal, FullCalendar},
+  components: {Modal, FullCalendar, Popover},
   data: () => ({
     eventId: null,
     shortDescription: '',
@@ -105,7 +109,7 @@ export default {
         eventChange: this.eventChange,
         eventClick: this.openModalUpdateEvent,
         dateClick: this.openModalCreateNewEvent ,
-        eventDidMount: this.attachTooltip,
+        eventDidMount: this.attachPopover,
         stickyHeaderDates: 'true',
         slotEventOverlap: false,
         weekText: 'S',
@@ -259,6 +263,11 @@ export default {
         delay: { show: 500, hide: 100 }
       });
     },
+
+    attachPopover: function(info) {
+      new this.$bootstrap.Popover(info.el, {
+      });
+    },
     prepareHolidays: function () {
       let ph = new PublicHolidayApi();
       ph.getHolidays()
@@ -298,6 +307,9 @@ export default {
     this.prepareHolidays()
 
   },
+  mounted() {
+    this.$bootstrapActivatePopovers()
+  }
 }
 </script>
 

@@ -15,6 +15,7 @@ class EventAdapter {
         translatedEvent.extendedProps = {}
         translatedEvent.extendedProps.fullDescription = event.fullDescription
         translatedEvent.extendedProps.tooltip = null
+        translatedEvent.extendedProps.contacts = event.contacts
 
         return translatedEvent
     }
