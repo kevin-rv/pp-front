@@ -88,7 +88,6 @@ th .fc-scrollgrid-sync-inner:not(a) {
 }
 
 .fc-popover-body
-
 {
   background-color: #fff;
 }
@@ -96,19 +95,44 @@ th .fc-scrollgrid-sync-inner:not(a) {
 .fc-day-sun a {
   color: red !important;
 }
+//.fc-timegrid-slot:hover {
+//  background-color: red;
+//}
 
 .fc .fc-bg-event {
   background-color: red !important;
-  opacity: 0.2 !important;
+  opacity: 0.3 !important;
+
+}
+
+.fc .fc-bg-event .fc-event-title {
   color: black;
   text-transform: uppercase;
-  font-weight: bold;
-  text-align: center;
+  //font-weight: bold;
+  //text-align: center;
 }
 
 #app {
-  font-size: 0.75rem;
+  font-size: 0.75rem;   /* a revoir avec @media */
   word-break: break-all;
+}
+
+//.fc-day {
+//  cursor: pointer;
+//}
+
+.fc-daygrid-day-number {
+  margin: 0.08rem;
+  min-width: 1.8rem;
+  padding: 0.1rem;
+  text-align: center;
+}
+
+.fc-day:hover .fc-daygrid-day-number {
+  background-color: #B8B8B8;
+  border-radius: 50%;
+  color: #FFFFFF;
+  transition: background-color 0.2s;
 }
 
 

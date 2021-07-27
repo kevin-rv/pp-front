@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "Popover",
+  name: "ButtonWithPopover",
   props: {
     title: {
       required: true,

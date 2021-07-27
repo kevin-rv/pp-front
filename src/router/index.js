@@ -13,8 +13,14 @@ import UpdateTask from "../views/MenuTasks/UpdateTask";
 import UpdateContact from "../views/MenuContacts/UpdateContact";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
 import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
+import testView from "../views/testView";
 
 const routes = [
+  {
+    path: '/test',
+    name: 'test',
+    component: testView,
+  },
   {
     path: '/',
     name: 'Home',

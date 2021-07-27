@@ -35,8 +35,6 @@
     <slot><p>This action is definitive</p></slot>
   </modal>
 
-  <popover :title="shortDescription" :content="fullDescription + startDatetime + endDatetime"></popover>
-
   <div style="background-color: white">
     <full-calendar :options="calendarOptions" data-bs-toggle="popover" ref="calendar" id="full-calendar"/>
   </div>
@@ -45,7 +43,7 @@
 <script>
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fullcalendar/core/vdom' // solves problem with Vite
-import FullCalendar from '@fullcalendar/vue3'
+import  FullCalendar from '@fullcalendar/vue3'
 import bootstrapPlugin from '@fullcalendar/bootstrap'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGrid from '@fullcalendar/timegrid'
@@ -56,14 +54,16 @@ import EventAdapter from "../events/eventAdapter";
 import Modal from "../components/Modal";
 import moment from 'moment'
 import PublicHolidayApi from "../api/publicHolidayApi";
-import Popover from "../components/Popover"
 
 
 
 
 export default {
   name: "Planning",
-  components: {Modal, FullCalendar, Popover},
+  components: {
+    Modal,
+    FullCalendar,
+  },
   data: () => ({
     eventId: null,
     shortDescription: '',
@@ -74,6 +74,7 @@ export default {
     modalCreateUpdateEventAction: () => {},
     modalCreateUpdateEventDeleteIsActive: false,
     holidays: [],
+    popoverRefs: {},
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
@@ -110,6 +111,7 @@ export default {
         eventClick: this.openModalUpdateEvent,
         dateClick: this.openModalCreateNewEvent ,
         eventDidMount: this.attachPopover,
+        eventWillUnmount: this.detachPopover,
         stickyHeaderDates: 'true',
         slotEventOverlap: false,
         weekText: 'S',
@@ -157,6 +159,8 @@ export default {
     },
     eventChange: function (info) {
       let event = EventAdapter.adaptFromFullCalendarEvent(info.event)
+
+      // this.updatePopover(info) todo, fix bug when wrap event size
 
       this.planningApi.updateEvent(this.$route.params.id, event)
           .catch(message => {
@@ -254,19 +258,39 @@ export default {
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
       modal.show()
     },
-    attachTooltip: function(info) {
-      if (!info.event.extendedProps.fullDescription) {
-        return
-      }
-      new this.$bootstrap.Tooltip(info.el, {   // TODO Tooltip à revoir
-        title: info.event.extendedProps.fullDescription,
-        delay: { show: 500, hide: 100 }
-      });
-    },
-
     attachPopover: function(info) {
-      new this.$bootstrap.Popover(info.el, {
-      });
+      let popover = new this.$bootstrap.Popover(info.el, {
+        title: info.event.title,
+        content: () => {
+          let content = ''
+
+          content += '<div class="bg-white"><b>Description : <br> </b> ' + info.event.extendedProps.fullDescription + ' <hr/></div>'
+          content += '<div class="bg-white"><b>Début de l\'event : </b> <br>  ' + 'Le ' + moment(info.event.start).format('dddd LL à HH:mm') + '<hr/> </div>'
+          content += '<div class="bg-white"><b>Fin de l\'évent : </b> <br> ' + 'Le ' + moment(info.event.end).format('dddd LL à HH:mm') + '</div>'
+
+          return content
+        },
+        html: true,
+        trigger: 'hover',
+      })
+      this.popoverRefs[info.event.id] = popover
+    },
+    detachPopover: function(info) {
+      this.popoverRefs[info.event.id].disable()
+      this.popoverRefs[info.event.id].hide()
+    },
+    updatePopover: function(info) {
+      this.detachPopover(info)
+      this.attachPopover(info, this.popoverRefs[info.event.id]._element)
+      // console.log(this.popoverRefs[eventId].tip)
+      // console.log(this.popoverRefs[eventId].element)
+      // console.log(this.popoverRefs[eventId]._element)
+      // console.log(this.popoverRefs[eventId]._config)
+      // this.popoverRefs[eventId]._config.content = function () {
+      //   return 'yo'
+      // }
+      // this.popoverRefs[eventId].hide()
+      // this.popoverRefs[eventId].show()
     },
     prepareHolidays: function () {
       let ph = new PublicHolidayApi();
@@ -307,9 +331,6 @@ export default {
     this.prepareHolidays()
 
   },
-  mounted() {
-    this.$bootstrapActivatePopovers()
-  }
 }
 </script>
 

@@ -16,6 +16,7 @@ class EventAdapter {
         translatedEvent.extendedProps.fullDescription = event.fullDescription
         translatedEvent.extendedProps.tooltip = null
         translatedEvent.extendedProps.contacts = event.contacts
+        translatedEvent.extendedProps.popoverRef = null
 
         return translatedEvent
     }

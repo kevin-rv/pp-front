@@ -8,6 +8,9 @@ import bootstrap from 'bootstrap/dist/js/bootstrap'
 import 'bootstrap/scss/bootstrap.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
+import 'vue-datetime/dist/vue-datetime.css'
+
+
 let app = createApp(App).use(store).use(router)
 app.config.globalProperties.$bootstrap = bootstrap;
 app.config.globalProperties.$bootstrapActivatePopovers = function () {
