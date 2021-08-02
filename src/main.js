@@ -8,10 +8,10 @@ import bootstrap from 'bootstrap/dist/js/bootstrap'
 import 'bootstrap/scss/bootstrap.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 
-import 'vue-datetime/dist/vue-datetime.css'
+import datetime from 'vue3-datetime-plugin/src/index'
 
 
-let app = createApp(App).use(store).use(router)
+let app = createApp(App).use(store).use(router).use(datetime)
 app.config.globalProperties.$bootstrap = bootstrap;
 app.config.globalProperties.$bootstrapActivatePopovers = function () {
     let popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))

@@ -1,18 +1,8 @@
 <template>
 <!--              CREATE-->
-  <modal title="Create Planning"
-         ref="modalCreatePlanning"
-         :action-func="createPlanning"
-         action-text="Save"
-         button-action-class="btn-info text-white"
-  >
-    <label class="col-form-label">Name</label>
-    <input type="text" class="form-control" v-model="name">
-  </modal>
-<!--              UPDATE-->
-  <modal title="Update planning"
-         ref="modalUpdatePlanning"
-         :action-func="updatePlanning"
+  <modal :title="modalCreateUpdatePlanningTitle"
+         ref="modalCreateUpdatePlanning"
+         :action-func="modalCreateUpdatePlanningAction"
          action-text="Save"
          button-action-class="btn-info text-white"
   >
@@ -61,6 +51,8 @@ export default {
     name: '',
     planningIdToDelete: null,
     planningToUpdate: {},
+    modalCreateUpdatePlanningTitle: '',
+    modalCreateUpdatePlanningAction: () => {},
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', plannings: 'allPlannings'})
@@ -76,13 +68,18 @@ export default {
           .catch(() => {})
     },
     openModalCreatePlanning() {
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreatePlanning.$el)
+      this.name = ''
+      this.modalCreateUpdatePlanningTitle = 'Create Planning'
+      this.modalCreateUpdatePlanningAction = this.createPlanning
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdatePlanning.$el)
       modal.show()
     },
     openModalUpdatePlanning(planningToUpdate) {
       this.planningToUpdate = planningToUpdate
       this.name = planningToUpdate.name
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalUpdatePlanning.$el)
+      this.modalCreateUpdatePlanningTitle = 'Update Planning'
+      this.modalCreateUpdatePlanningAction = this.updatePlanning
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdatePlanning.$el)
       modal.show()
     },
     openModalDeletePlanning(planningIdToDelete) {
@@ -95,7 +92,7 @@ export default {
           .then(() => {
             this.updated()
             this.name = ''
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreatePlanning.$el)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdatePlanning.$el)
             modal.hide()
           })
           .catch(message => {
@@ -110,7 +107,7 @@ export default {
       this.planningApi.updatePlanning(this.planningToUpdate.id, this.name)
           .then(() => {
             this.updated()
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalUpdatePlanning.$el)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdatePlanning.$el)
             modal.hide()
           })
           .catch(message => {

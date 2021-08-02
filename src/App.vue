@@ -1,7 +1,7 @@
 <template>
   <navbar/>
   <alert-center/>
-  <div class="container p-0 min-vh-100">
+  <div class="container-fluid p-0 min-vh-100">
     <router-view/>
   </div>
   <Footer/>

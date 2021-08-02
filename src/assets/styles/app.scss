@@ -1,3 +1,5 @@
+@import "~include-media/dist/include-media";
+
 .fc .fc-button-primary {
   //background-color: #dc3545 !important;
   background-color: #158cba !important;
@@ -95,9 +97,6 @@ th .fc-scrollgrid-sync-inner:not(a) {
 .fc-day-sun a {
   color: red !important;
 }
-//.fc-timegrid-slot:hover {
-//  background-color: red;
-//}
 
 .fc .fc-bg-event {
   background-color: red !important;
@@ -112,10 +111,6 @@ th .fc-scrollgrid-sync-inner:not(a) {
   //text-align: center;
 }
 
-#app {
-  font-size: 0.75rem;   /* a revoir avec @media */
-  word-break: break-all;
-}
 
 //.fc-day {
 //  cursor: pointer;
@@ -133,6 +128,17 @@ th .fc-scrollgrid-sync-inner:not(a) {
   border-radius: 50%;
   color: #FFFFFF;
   transition: background-color 0.2s;
+}
+
+@include media(">phone", "<=tablet") {
+  #app {
+    font-size: 0.75rem ; /* a revoir avec @media */
+    word-break: break-all;
+  }
+  .fc {
+    min-height: 100vh;
+  }
+
 }
 
 

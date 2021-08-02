@@ -17,11 +17,11 @@
     </div>
     <div class="mb-3">
       <label class="form-label">Event start</label>
-      <input type="datetime-local" class="form-control" v-model="startDatetime">
+      <datetime v-model="startDatetime" inputClass="form-control" title="Event start" type="datetime" :minuteStep="30" />
     </div>
     <div class="mb-3">
       <label class="form-label">Event end</label>
-      <input type="datetime-local" class="form-control" v-model="endDatetime">
+      <datetime v-model="endDatetime" inputClass="form-control" title="Event end" type="datetime" :minuteStep="30" />
     </div>
   </modal>
 
@@ -259,6 +259,9 @@ export default {
       modal.show()
     },
     attachPopover: function(info) {
+      if (info.event.display === 'background') {
+        return;
+      }
       let popover = new this.$bootstrap.Popover(info.el, {
         title: info.event.title,
         content: () => {
@@ -276,6 +279,9 @@ export default {
       this.popoverRefs[info.event.id] = popover
     },
     detachPopover: function(info) {
+      if (info.event.display === 'background') {
+        return;
+      }
       this.popoverRefs[info.event.id].disable()
       this.popoverRefs[info.event.id].hide()
     },
