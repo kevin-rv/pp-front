@@ -245,8 +245,6 @@ export default {
             console.log(this.$refs)
             let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
             modal.hide()
-            modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
-            modal.hide()
             this.updated()
           })
           .catch(message => {
@@ -255,6 +253,8 @@ export default {
 
     },
     openModalDeleteEvent() {
+      let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+      modalUpdate.hide()
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
       modal.show()
     },

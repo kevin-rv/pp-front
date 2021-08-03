@@ -46,7 +46,9 @@ import Modal from "../../components/Modal";
 
 export default {
   name: "ManagementMenuPlanning",
-  components: {Modal},
+  components: {
+    Modal,
+  },
   data: () => ({
     name: '',
     planningIdToDelete: null,
@@ -58,7 +60,10 @@ export default {
     ...mapGetters({planningApi: 'planningApi', plannings: 'allPlannings'})
   },
   methods: {
-    ...mapActions({updateAllPlannings: 'updateAllPlannings', addMessage: 'addMessage'}),
+    ...mapActions({
+      updateAllPlannings: 'updateAllPlannings',
+      addMessage: 'addMessage'
+    }),
     updated() {
       this.planningApi.getAllPlannings()
           .then(data => {

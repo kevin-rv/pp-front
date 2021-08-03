@@ -80,11 +80,11 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    createOneContact(name, phoneNumber, home, birthday, email, relationship, work)
+    createOneContact(contact)
     {
 
         return axios
-            .post(this.rootPath + '/contact', qs.stringify({name, phoneNumber, home, birthday, email, relationship, work}), {headers: {
+            .post(this.rootPath + '/contact', qs.stringify(contact), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -145,10 +145,10 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    updateContact(id, name, phoneNumber, home, birthday, email, relationship, work)
+    updateContact(contactId, contact)
     {
         return axios
-            .patch(this.rootPath + '/contact/' + id , qs.stringify({name, phoneNumber, home, birthday, email, relationship, work}), {headers: {
+            .patch(this.rootPath + '/contact/' + contactId , qs.stringify(contact), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -203,6 +203,18 @@ class planningApi
     {
         return axios
             .delete(this.rootPath + '/planning/' + planningId + '/event/' + eventId ,{headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+    deleteContact(contactId)
+    {
+        return axios
+            .delete(this.rootPath + '/contact/' + contactId ,{headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
