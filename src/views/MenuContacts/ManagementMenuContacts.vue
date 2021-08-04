@@ -1,38 +1,38 @@
 <template>
   <modal :title="modalCreateUpdateContactTitle"
-          ref="modalCreateUpdateContact"
+         ref="modalCreateUpdateContact"
          :action-func="modalCreateUpdateContactAction"
          action-text="Save"
          button-action-class="btn-info text-white"
   >
     <template v-if="modalCreateUpdateContactDeleteIsActive" v-slot:header><button type="button" class=" btn bi-trash" @click="openModalDeleteContact"></button></template>
     <div class="mb-3">
-        <label class="col-form-label">Name *</label>
-        <input type="text" class="form-control" v-model="name">
+      <label class="col-form-label">Name *</label>
+      <input type="text" class="form-control" v-model="name">
     </div>
     <div class="mb-3">
-        <label class="col-form-label">PhoneNumber *</label>
-        <input type="text" class="form-control" v-model="phoneNumber">
-    </div>
-      <div class="mb-3">
-        <label class="col-form-label">Home</label>
-        <input type="text" class="form-control" v-model="home">
-      </div>
-    <div class="mb-3">
-        <label class="col-form-label">Birthday *</label>
-        <datetime v-model="birthday" inputClass="form-control" title="Birthday" />
+      <label class="col-form-label">PhoneNumber *</label>
+      <input type="text" class="form-control" v-model="phoneNumber">
     </div>
     <div class="mb-3">
-        <label class="col-form-label">Email</label>
-        <input type="text" class="form-control" v-model="email">
+      <label class="col-form-label">Home</label>
+      <input type="text" class="form-control" v-model="home">
     </div>
     <div class="mb-3">
-        <label class="col-form-label">Relationship</label>
-        <input type="text" class="form-control" v-model="relationship">
+      <label class="col-form-label">Birthday *</label>
+      <datetime v-model="birthday" inputClass="form-control" title="Birthday" />
     </div>
     <div class="mb-3">
-        <label class="col-form-label">Work</label>
-        <input type="text" class="form-control" v-model="work">
+      <label class="col-form-label">Email</label>
+      <input type="text" class="form-control" v-model="email">
+    </div>
+    <div class="mb-3">
+      <label class="col-form-label">Relationship</label>
+      <input type="text" class="form-control" v-model="relationship">
+    </div>
+    <div class="mb-3">
+      <label class="col-form-label">Work</label>
+      <input type="text" class="form-control" v-model="work">
     </div>
   </modal>
 
@@ -45,23 +45,24 @@
     <p>Do you want delete your contact ?</p>
   </modal>
 
-  <div class="row justify-content-center mt-5 ">
-      <div class="card">
-        <div class="card-header text-center">
-          <h5>
-            Menu Contact
-            <button class="bi bi-plus-circle border-0 bg-transparent" @click="openModalCreateContact"></button>
-          </h5>
-        </div>
-        <div class="card-body">
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">
-              <a class="contact-link" @click.prevent="openModalUpdateContact(contact)">{{contact.name}}</a>
-            </li>
-          </ul>
-        </div>
+  <div>
+    <div class="card">
+      <div class="card-header text-center">
+        <h5>
+          Menu Contact
+          <button class="bi bi-plus-circle border-0 bg-transparent" @click="openModalCreateContact"></button>
+        </h5>
       </div>
+      <div class="card-body overflow-auto" style="max-height: 100vh;">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item" v-for="(contact, index) in contacts" :key="index" @click="openModalUpdateContact(contact)">
+            {{contact.name}}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
+  <!--  TODO AJOUTER TRI ALPHABETIQUE-->
 </template>
 
 <script>
@@ -75,20 +76,20 @@ export default {
     Modal,
   },
   data:() => ({
-      name: '',
-      phoneNumber: '',
-      home: '',
-      birthday: null,
-      email: '',
-      relationship: '',
-      work: '',
-      modalCreateUpdateContactTitle: '',
-      modalCreateUpdateContactAction: () => {},
-      modalCreateUpdateContactDeleteIsActive: false,
-      contactUpdateDeleteId: null,
+    name: '',
+    phoneNumber: '',
+    home: '',
+    birthday: null,
+    email: '',
+    relationship: '',
+    work: '',
+    modalCreateUpdateContactTitle: '',
+    modalCreateUpdateContactAction: () => {},
+    modalCreateUpdateContactDeleteIsActive: false,
+    contactUpdateDeleteId: null,
   }),
   computed: {
-    ...mapGetters({planningApi: 'planningApi', plannings: 'allPlannings', contacts: 'allContacts'})
+    ...mapGetters({planningApi: 'planningApi', plannings: 'allPlannings', contacts: 'allContacts'}),
   },
   methods: {
     ...mapActions({
@@ -206,17 +207,14 @@ export default {
           this.updateAllContacts(data)
         })
         .catch(() => {})
-  }
+  },
 }
 </script>
 
 <style scoped>
-.contact-link {
-  text-decoration: none;
-  cursor: pointer;
-  color: black;
-}
+
 li.list-group-item:hover {
   background-color: rgba(239, 235, 235, 0.99);
+  cursor: pointer;
 }
 </style>

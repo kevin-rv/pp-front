@@ -8,9 +8,7 @@ import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
 import ManagementMenuTasks from "../views/MenuTasks/ManagementMenuTasks";
 import CreateTask from "../views/MenuTasks/CreateTask";
-import CreateContact from "../views/MenuContacts/CreateContact";
 import UpdateTask from "../views/MenuTasks/UpdateTask";
-import UpdateContact from "../views/MenuContacts/UpdateContact";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
 import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
 
@@ -78,18 +76,6 @@ const routes = [
     path: '/planning/:id/task',
     name: 'TaskCreate',
     component: CreateTask,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/contact',
-    name: 'ContactCreate',
-    component: CreateContact,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/contact/:id',
-    name: 'ContactUpdate',
-    component: UpdateContact,
     meta: { requiresAuth: true }
   },
   {
