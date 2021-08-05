@@ -35,6 +35,95 @@
     <slot><p>This action is definitive</p></slot>
   </modal>
 
+  <modal :title="modalCreateUpdateTaskTitle"
+         ref="modalCreateUpdateTask"
+         :action-func="modalCreateUpdateTaskAction"
+         action-text="Save"
+         button-action-class="btn-info text-white"
+  >
+    <template v-if="modalCreateUpdateTaskDeleteIsActive" v-slot:header><button type="button" class=" btn bi-trash" @click="openModalDeleteTask"></button></template>
+    <div class="mb-3">
+      <label class="form-label">Short Description</label>
+      <input type="text" class="form-control" v-model="shortDescription">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Done Limit Date</label>
+      <datetime v-model="doneLimitDate" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" />
+    </div>
+    <div class="form-check">
+      <input class="form-check-input" type="checkbox" id="flexCheckDisabled" v-model="done" disabled>
+      <label class="form-check-label" for="flexCheckDisabled">
+        Done
+      </label>
+    </div>
+  </modal>
+
+  <modal
+      title="Delete Task"
+      ref="modalDeleteTask"
+      :action-func="deleteTask"
+      action-text="delete"
+      button-action-class="btn-danger"
+  >
+    <slot><p>This action is definitive</p></slot>
+  </modal>
+
+  <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel" ref="offCanvas" >
+    <div class="offcanvas-header card-header">
+      <h5>
+        Task
+        <button class="bi bi-plus-circle border-0 bg-transparent" @click="openModalCreateTask"></button>
+      </h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body card-body">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active"
+                  data-bs-toggle="tab"
+                  data-bs-target="#task-undone"
+                  type="button"
+                  role="tab"
+          >
+            Task
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#task-done"
+                  type="button"
+                  role="tab"
+          >
+            Task done
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="task-undone" role="tabpanel">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" v-for="(task, index) in getUndoneTasks" :key="index" @click="openModalUpdateTask(task)">
+              <p>Description: {{task.shortDescription}}</p>
+              <p v-if="task.doneLimitDate !== null">done limit date: {{task.doneLimitDate}}</p>
+            </li>
+          </ul>
+        </div>
+        <div class="tab-pane fade" id="task-done" role="tabpanel">
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item" v-for="(task, index) in getDoneTasks" :key="index" @click="openModalUpdateTask(task)">
+              <p>Description: {{task.shortDescription}}</p>
+              <p v-if="task.doneLimitDate !== null">done limit date: {{task.doneLimitDate}}</p>
+              <p>done date: {{task.done}}</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <div style="background-color: white">
     <full-calendar :options="calendarOptions" data-bs-toggle="popover" ref="calendar" id="full-calendar"/>
   </div>
@@ -71,13 +160,28 @@ export default {
     startDatetime: null,
     endDatetime: null,
     modalCreateUpdateEventTitle: '',
-    modalCreateUpdateEventAction: () => {},
+    modalCreateUpdateEventAction: () => {
+    },
     modalCreateUpdateEventDeleteIsActive: false,
+    modalCreateUpdateTaskTitle: '',
+    modalCreateUpdateTaskDeleteIsActive: false,
+    modalCreateUpdateTaskAction: () => {
+    },
+    done: null,
+    doneLimitDate: null,
+    taskUpdateDeleteId: null,
     holidays: [],
     popoverRefs: {},
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
+    getDoneTasks: function () {
+      return this.tasks.filter(task => task.done !== null)
+    },
+    getUndoneTasks: function () {
+      console.log(this.tasks.filter(task => task.done === null))
+      return this.tasks.filter(task => task.done === null)
+    },
     fullcalendarCompatibleEvents: function () {
       let events = [];
       this.events.forEach(value => {
@@ -88,17 +192,17 @@ export default {
     },
     calendarOptions: function () {
       return {
-        plugins: [ dayGridPlugin, timeGrid, interactionPlugin, bootstrapPlugin, listPlugin ],
+        plugins: [dayGridPlugin, timeGrid, interactionPlugin, bootstrapPlugin, listPlugin],
         initialView: 'timeGridWeek',
         locale: 'fr',
         allDaySlot: false,
         headerToolbar: {
           center: 'title',
           right: 'prevYear,prev,today,next,nextYear',
-          left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
+          left: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek,task',
         },
-        selectable: true ,
-        firstDay: 1 ,
+        selectable: true,
+        firstDay: 1,
         // themeSystem: 'bootstrap',
         timeZone: 'local',
         nowIndicator: true,
@@ -109,18 +213,26 @@ export default {
         dayMaxEvents: true,
         eventChange: this.eventChange,
         eventClick: this.openModalUpdateEvent,
-        dateClick: this.openModalCreateNewEvent ,
+        dateClick: this.openModalCreateNewEvent,
         eventDidMount: this.attachPopover,
         eventWillUnmount: this.detachPopover,
         stickyHeaderDates: 'true',
         slotEventOverlap: false,
         weekText: 'S',
+        customButtons: {
+          task: {
+            text: 'Tache',
+            click: () => {
+              this.openOffCanvasTask()
+            }
+          }
+        },
         buttonText: {
-          today:    "Aujourd'hui",
-          month:    'Mois',
-          week:     'Semaine',
-          day:      'Jour',
-          list:     'Liste'
+          today: "Aujourd'hui",
+          month: 'Mois',
+          week: 'Semaine',
+          day: 'Jour',
+          list: 'Liste',
         },
         slotLabelFormat: {
           hour: 'numeric',
@@ -150,12 +262,22 @@ export default {
       updateAllTasks: 'updateAllTasks',
       addMessage: 'addMessage'
     }),
-    updated() {
+    updatedTask() {
+      this.planningApi.getPlanningAllTasks(this.$route.params.id)
+          .then(data => {
+            this.updateAllTasks(data)
+          })
+          .catch(() => {
+
+          })
+    },
+    updatedEvent() {
       this.planningApi.getPlanningAllEvents(this.$route.params.id)
           .then(data => {
             this.updateAllEvents(data)
           })
-          .catch(() => {})
+          .catch(() => {
+          })
     },
     eventChange: function (info) {
       let event = EventAdapter.adaptFromFullCalendarEvent(info.event)
@@ -181,7 +303,7 @@ export default {
       }
       this.planningApi.updateEvent(this.$route.params.id, event)
           .then(() => {
-            this.updated()
+            this.updatedEvent()
             let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
             modal.hide()
           })
@@ -193,7 +315,7 @@ export default {
             })
           })
     },
-    openModalUpdateEvent: function(info) {
+    openModalUpdateEvent: function (info) {
       this.eventId = info.event.id
       this.shortDescription = info.event.title
       this.fullDescription = info.event.extendedProps.fullDescription
@@ -206,7 +328,7 @@ export default {
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
       modal.show()
     },
-    eventAdd: function() {
+    eventAdd: function () {
       let event = {
         shortDescription: this.shortDescription,
         fullDescription: this.fullDescription,
@@ -216,7 +338,7 @@ export default {
       console.log(event)
       this.planningApi.createOneEvent(this.$route.params.id, event)
           .then(() => {
-            this.updated()
+            this.updatedEvent()
             let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
             modal.hide()
           })
@@ -240,12 +362,12 @@ export default {
       modal.show()
     },
     removeEvent: function () {
-      this.planningApi.deleteEvent(this.$route.params.id ,this.eventId)
+      this.planningApi.deleteEvent(this.$route.params.id, this.eventId)
           .then(() => {
             console.log(this.$refs)
             let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
             modal.hide()
-            this.updated()
+            this.updatedEvent()
           })
           .catch(message => {
             console.log(message)
@@ -258,7 +380,12 @@ export default {
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
       modal.show()
     },
-    attachPopover: function(info) {
+    openOffCanvasTask() {
+      console.log(this.$refs.offCanvas)
+      let offCanvasTask = this.$bootstrap.Offcanvas.getOrCreateInstance(this.$refs.offCanvas)
+      offCanvasTask.show()
+    },
+    attachPopover: function (info) {
       if (info.event.display === 'background') {
         return;
       }
@@ -278,14 +405,14 @@ export default {
       })
       this.popoverRefs[info.event.id] = popover
     },
-    detachPopover: function(info) {
+    detachPopover: function (info) {
       if (info.event.display === 'background') {
         return;
       }
       this.popoverRefs[info.event.id].disable()
       this.popoverRefs[info.event.id].hide()
     },
-    updatePopover: function(info) {
+    updatePopover: function (info) {
       this.detachPopover(info)
       this.attachPopover(info, this.popoverRefs[info.event.id]._element)
       // console.log(this.popoverRefs[eventId].tip)
@@ -314,8 +441,96 @@ export default {
               type: 'warning'
             })
           })
+    },
+    // TODO GERER Le champs input qui s'efface quand on appuie sur cancel ou via un button à rajouter
+    createTask() {
+      let task = {
+        shortDescription: this.shortDescription,
+        done: this.done !== null ? moment(this.done).format('YYYY-MM-DD') : null,
+        doneLimitDate: this.doneLimitDate !== null ? moment(this.doneLimitDate).format('YYYY-MM-DD') : null,
+      }
+      this.planningApi.createOneTask(this.$route.params.id, task)
+          .then(() => {
+            this.updatedTask()
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
+            modal.hide()
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    openModalCreateTask() {
+      this.shortDescription = ''
+      this.done = null
+      this.doneLimitDate = null
+      this.modalCreateUpdateTaskTitle = 'Create Task'
+      this.modalCreateUpdateTaskAction = this.createTask
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
+      modal.show()
+    },
+// TODO ne pas grisé le done dans la modal update
+    updateTask() {
+      let task = {
+        id: this.taskUpdateDeleteId,
+        shortDescription: this.shortDescription,
+        done: this.done !== null ? moment(this.done).format('YYYY-MM-DD') : null,
+        doneLimitDate: this.doneLimitDate !== null ? moment(this.doneLimitDate).format('YYYY-MM-DD') : null,
+      }
+
+      console.log(task)
+
+      this.planningApi.updateTask(this.$route.params.id, task)
+          .then(() => {
+            this.updatedTask()
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
+            modal.hide()
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    openModalUpdateTask(task) {
+      this.taskUpdateDeleteId = task.id
+      this.shortDescription = task.shortDescription
+      this.done = task.done
+      this.doneLimitDate = task.doneLimitDate
+      this.modalCreateUpdateTaskTitle = 'Update Task'
+      this.modalCreateUpdateTaskAction = this.updateTask
+      this.modalCreateUpdateTaskDeleteIsActive = true
+
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
+      modal.show()
+    },
+
+    deleteTask(){
+      this.planningApi.deleteTask(this.$route.params.id, this.taskUpdateDeleteId)
+          .then(() => {
+            this.updatedTask()
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteTask.$el)
+            modal.hide()
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    openModalDeleteTask() {
+      let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
+      modalUpdate.hide()
+      let modalDelete = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteTask.$el)
+      modalDelete.show()
     }
+
   },
+
   beforeMount() {
     this.planningApi.getPlanningAllEvents(this.$route.params.id)
         .then(data => {

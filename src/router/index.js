@@ -7,8 +7,6 @@ import store from '../store/index'
 import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
 import ManagementMenuTasks from "../views/MenuTasks/ManagementMenuTasks";
-import CreateTask from "../views/MenuTasks/CreateTask";
-import UpdateTask from "../views/MenuTasks/UpdateTask";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
 import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
 
@@ -70,22 +68,6 @@ const routes = [
     path: '/planning/:id',
     name: 'planning',
     component: Planning,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/planning/:id/task',
-    name: 'TaskCreate',
-    component: CreateTask,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/planning/:planningId/task/:taskId',
-    name: 'TaskUpdate',
-    component: UpdateTask,
-    props: route => ({
-      taskId: route.params.taskId,
-      planningId: route.params.planningId,
-    }),
     meta: { requiresAuth: true }
   },
   {

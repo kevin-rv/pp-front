@@ -52,12 +52,10 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    createOneTask(id, shortDescription, done, doneLimitDate)
+    createOneTask(planningId, task)
     {
-        console.log(qs.stringify({shortDescription, done, doneLimitDate}));
-
         return axios
-            .post(this.rootPath + '/planning/' + id + '/task', qs.stringify({shortDescription, done, doneLimitDate}), {headers: {
+            .post(this.rootPath + '/planning/' + planningId + '/task', qs.stringify(task), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -159,10 +157,10 @@ class planningApi
     }
 
 
-    updateTask(planningId, taskId, shortDescription, done, doneLimitDate)
+    updateTask(planningId, task)
     {
         return axios
-            .patch(this.rootPath + '/planning/' + planningId + '/task/'+ taskId, qs.stringify({shortDescription, done, doneLimitDate}), {headers: {
+            .patch(this.rootPath + '/planning/' + planningId + '/task/'+ task.id, qs.stringify(task), {headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )
@@ -203,6 +201,19 @@ class planningApi
     {
         return axios
             .delete(this.rootPath + '/planning/' + planningId + '/event/' + eventId ,{headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
+
+    deleteTask(planningId, taskId)
+    {
+        return axios
+            .delete(this.rootPath + '/planning/' + planningId + '/task/' + taskId ,{headers: {
                     'content-type': 'application/x-www-form-urlencoded',
                     'authorization': 'Bearer ' + this.token }}
             )

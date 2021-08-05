@@ -33,7 +33,7 @@ export default {
     this.$refs.alert.addEventListener('closed.bs.alert', this.onModalClosed)
     setTimeout(() => {
       this.$refs.close.dispatchEvent(new MouseEvent('click'))
-    }, this.message.timeout || 5000)
+    }, this.message.timeout || 10000) // TODO CONTINUER GESTION ERREUR ET GERER LE TEMPS D'AFFICHAGE
   },
   beforeUnmount() {
     this.$refs.alert.removeEventListener('closed.bs.alert', this.onModalClosed)

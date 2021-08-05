@@ -63,6 +63,9 @@
     </div>
   </div>
   <!--  TODO AJOUTER TRI ALPHABETIQUE-->
+<!--  TODO Problème jour -->
+<!--  TODO Barre de recherche https://v3.vuejs.org/guide/transitions-list.html#staggering-list-transitions
+                              https://v3.vuejs.org/guide/a11y-semantics.html#buttons-->
 </template>
 
 <script>
