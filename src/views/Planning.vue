@@ -23,6 +23,13 @@
       <label class="form-label">Event end</label>
       <datetime v-model="endDatetime" inputClass="form-control" title="Event end" type="datetime" :minuteStep="30" />
     </div>
+    <div>
+    <ul class="list-group">
+      <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">{{contact.name}}
+        <button class="btn  btn-danger border-dark me-1 bi bi-x-octagon"></button>
+      </li>
+    </ul>
+    </div>
   </modal>
 
   <modal
@@ -195,10 +202,11 @@ export default {
     doneLimitDate: null,
     taskUpdateDeleteId: null,
     holidays: [],
+    contacts: [],
     popoverRefs: {},
   }),
   computed: {
-    ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
+    ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks', contacts: 'allContacts'}),
     checked: {
       get: function () {
         return this.done !== null
@@ -291,6 +299,7 @@ export default {
       updateAllPlannings: 'updateAllPlannings',
       updateAllEvents: 'updateAllEvents',
       updateAllTasks: 'updateAllTasks',
+      updateAllContacts: "updateAllContacts",
       addMessage: 'addMessage'
     }),
     updatedTask() {
@@ -352,6 +361,7 @@ export default {
       this.fullDescription = info.event.extendedProps.fullDescription
       this.startDatetime = moment(info.event.start).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
       this.endDatetime = moment(info.event.end).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
+      this.contacts = info.event.extendedProps.contacts
 
       this.modalCreateUpdateEventTitle = 'Update Event'
       this.modalCreateUpdateEventAction = this.eventUpdate
@@ -427,6 +437,7 @@ export default {
           content += '<div class="bg-white"><b>Description : <br> </b> ' + info.event.extendedProps.fullDescription + ' <hr/></div>'
           content += '<div class="bg-white"><b>Début de l\'event : </b> <br>  ' + 'Le ' + moment(info.event.start).format('dddd LL à HH:mm') + '<hr/> </div>'
           content += '<div class="bg-white"><b>Fin de l\'évent : </b> <br> ' + 'Le ' + moment(info.event.end).format('dddd LL à HH:mm') + '</div>'
+          content += '<div class="bg-white"><b>Contact : </b> <br> ' + info.event.extendedProps.contacts.map(contact => contact.name)+ '</div>'
 
           return content
         },
@@ -601,6 +612,13 @@ export default {
     this.planningApi.getPlanningAllTasks(this.$route.params.id)
         .then(data => {
           this.updateAllTasks(data)
+        })
+        .catch(() => {
+
+        })
+    this.planningApi.getAllContact()
+        .then(data => {
+          this.updateAllContacts(data)
         })
         .catch(() => {
 
