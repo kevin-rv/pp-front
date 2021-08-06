@@ -49,11 +49,15 @@
 
     <div class="mb-3">
       <label class="form-label">Done Limit Date</label>
-      <datetime v-model="doneLimitDate" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" />
+      <datetime v-model="doneLimitDate" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" />  <!-- TODO problème recule d'un jour  -->
     </div>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="flexCheckDisabled" v-model="done" disabled>
-      <label class="form-check-label" for="flexCheckDisabled">
+    <div class="mb-3" v-if="checked && done">
+      <label class="form-label">Done</label>
+      <datetime v-model="done" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" disabled/>
+    </div>
+    <div class="form-check" v-if="modalCreateUpdateTaskDeleteIsActive">
+      <input class="form-check-input" type="checkbox" id="flexCheck" v-model="checked">
+      <label class="form-check-label" for="flexCheck">
         Done
       </label>
     </div>
@@ -104,18 +108,38 @@
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="task-undone" role="tabpanel">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" v-for="(task, index) in getUndoneTasks" :key="index" @click="openModalUpdateTask(task)">
+            <li class="list-group-item"
+                :class="{warning: taskIsWarning(task)}"
+                v-for="(task) in getUndoneTasks" :key="task.id"
+                @click="openModalUpdateTask(task)"
+            >
               <p>Description: {{task.shortDescription}}</p>
               <p v-if="task.doneLimitDate !== null">done limit date: {{task.doneLimitDate}}</p>
+              <div class="form-check" @click.stop="setTaskToDone(task)">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" :checked="task.done !== null">
+                  Done
+                </label>
+              </div>
             </li>
           </ul>
         </div>
         <div class="tab-pane fade" id="task-done" role="tabpanel">
           <ul class="list-group list-group-flush">
-            <li class="list-group-item" v-for="(task, index) in getDoneTasks" :key="index" @click="openModalUpdateTask(task)">
+            <li class="list-group-item"
+                v-for="(task) in getDoneTasks"
+                :key="task.id"
+                @click="openModalUpdateTask(task)"
+            >
               <p>Description: {{task.shortDescription}}</p>
               <p v-if="task.doneLimitDate !== null">done limit date: {{task.doneLimitDate}}</p>
               <p>done date: {{task.done}}</p>
+              <div class="form-check" @click.stop="setTaskToUndone(task)">
+                <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" :checked="task.done !== null">
+                  Done
+                </label>
+              </div>
             </li>
           </ul>
         </div>
@@ -175,11 +199,18 @@ export default {
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks'}),
+    checked: {
+      get: function () {
+        return this.done !== null
+      },
+      set: function (newValue) {
+        this.done = newValue ? new Date() : null
+      }
+    },
     getDoneTasks: function () {
       return this.tasks.filter(task => task.done !== null)
     },
     getUndoneTasks: function () {
-      console.log(this.tasks.filter(task => task.done === null))
       return this.tasks.filter(task => task.done === null)
     },
     fullcalendarCompatibleEvents: function () {
@@ -381,7 +412,6 @@ export default {
       modal.show()
     },
     openOffCanvasTask() {
-      console.log(this.$refs.offCanvas)
       let offCanvasTask = this.$bootstrap.Offcanvas.getOrCreateInstance(this.$refs.offCanvas)
       offCanvasTask.show()
     },
@@ -468,25 +498,49 @@ export default {
       this.doneLimitDate = null
       this.modalCreateUpdateTaskTitle = 'Create Task'
       this.modalCreateUpdateTaskAction = this.createTask
+      this.modalCreateUpdateTaskDeleteIsActive = false
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
       modal.show()
     },
-// TODO ne pas grisé le done dans la modal update
+    // TODO Task interchangable
     updateTask() {
       let task = {
         id: this.taskUpdateDeleteId,
         shortDescription: this.shortDescription,
-        done: this.done !== null ? moment(this.done).format('YYYY-MM-DD') : null,
+        done: this.done !== null ? moment(new Date()).format('YYYY-MM-DD') : null,
         doneLimitDate: this.doneLimitDate !== null ? moment(this.doneLimitDate).format('YYYY-MM-DD') : null,
       }
-
-      console.log(task)
-
       this.planningApi.updateTask(this.$route.params.id, task)
           .then(() => {
             this.updatedTask()
             let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
             modal.hide()
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    setTaskToDone(task) {
+      task.done = moment(new Date()).format('YYYY-MM-DD')
+      this.planningApi.updateTask(this.$route.params.id, task)
+          .then(() => {
+            this.updatedTask()
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    },
+    setTaskToUndone(task) {
+      task.done = null
+      this.planningApi.updateTask(this.$route.params.id, task)
+          .then(() => {
+            this.updatedTask()
           })
           .catch(message => {
             this.addMessage({
@@ -527,8 +581,10 @@ export default {
       modalUpdate.hide()
       let modalDelete = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteTask.$el)
       modalDelete.show()
+    },
+    taskIsWarning(task) {
+      return moment(task.doneLimitDate).unix() <= moment().unix()
     }
-
   },
 
   beforeMount() {
@@ -559,6 +615,19 @@ export default {
 #full-calendar a {
   color: #2c3e50;
 }
+
+li.list-group-item:hover, li.list-group-item .form-check:hover, li.list-group-item .form-check:hover label {
+  background-color: rgba(239, 235, 235, 0.99);
+  cursor: pointer;
+}
+
+li.list-group-item.warning {
+  background-color: rgba(250, 0, 0, 0.2);
+}
+/*TODO TASK GERER LES COULEURS */
+/*li.list-group-item.warning .form-check:hover  {*/
+/*  background-color: rgba(250, 0, 0, 0.2);*/
+/*}*/
 
 #full-calendar button {
   text-transform: uppercase;

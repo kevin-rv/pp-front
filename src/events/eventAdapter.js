@@ -14,9 +14,7 @@ class EventAdapter {
         translatedEvent.end = event.endDatetime
         translatedEvent.extendedProps = {}
         translatedEvent.extendedProps.fullDescription = event.fullDescription
-        translatedEvent.extendedProps.tooltip = null
         translatedEvent.extendedProps.contacts = event.contacts
-        translatedEvent.extendedProps.popoverRef = null
 
         return translatedEvent
     }
@@ -29,6 +27,7 @@ class EventAdapter {
         translatedEvent.startDatetime = this._dateConvertCleanUp(event.start)
         translatedEvent.endDatetime = this._dateConvertCleanUp(event.end)
         translatedEvent.fullDescription = event.extendedProps.fullDescription
+        translatedEvent.contacts = event.extendedProps.contacts.map(contact => contact.id)
 
         return translatedEvent
     }
