@@ -25,21 +25,15 @@
     </div>
     <div>
     <ul class="list-group">
-      <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">{{contact.name}}
-        <button class="btn  btn-danger border-dark me-1 bi bi-x-octagon"></button>
+      <div>
+        <label class="form-label">Contact</label>
+        <button type="button" class="bi bi-plus-circle border-0 bg-transparent" onclick="openModalAddContact"></button>
+      </div>
+      <li class="list-group-item" v-for="(contact, index) in eventContacts" :key="index">{{contact.name}}
+        <button type="button" class="btn btn-danger border-dark me-1 bi bi-x-octagon float-end" onclick="removeContactFromEvent"></button>
       </li>
     </ul>
     </div>
-  </modal>
-
-  <modal
-      title="Delete Event"
-      ref="modalDeleteEvent"
-      :action-func="removeEvent"
-      action-text="delete"
-      button-action-class="btn-danger"
-  >
-    <slot><p>This action is definitive</p></slot>
   </modal>
 
   <modal :title="modalCreateUpdateTaskTitle"
@@ -80,6 +74,19 @@
     <slot><p>This action is definitive</p></slot>
   </modal>
 
+  <modal
+      title="Delete Event"
+      ref="modalDeleteEvent"
+      :action-func="removeEvent"
+      action-text="delete"
+      button-action-class="btn-danger"
+  >
+    <slot><p>This action is definitive</p></slot>
+  </modal>
+
+<!--  TODO rassembler les actions de deletion en une seule-->
+
+<!-- TODO transformer en composant le offcanvas-->
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel" ref="offCanvas" >
     <div class="offcanvas-header card-header">
       <h5>
@@ -176,8 +183,6 @@ import moment from 'moment'
 import PublicHolidayApi from "../api/publicHolidayApi";
 
 
-
-
 export default {
   name: "Planning",
   components: {
@@ -202,8 +207,8 @@ export default {
     doneLimitDate: null,
     taskUpdateDeleteId: null,
     holidays: [],
-    contacts: [],
     popoverRefs: {},
+    eventContacts: [],
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks', contacts: 'allContacts'}),
@@ -361,7 +366,7 @@ export default {
       this.fullDescription = info.event.extendedProps.fullDescription
       this.startDatetime = moment(info.event.start).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
       this.endDatetime = moment(info.event.end).utcOffset(0, true).format('YYYY-MM-DDTHH:mm:ss')
-      this.contacts = info.event.extendedProps.contacts
+      this.eventContacts = info.event.extendedProps.contacts
 
       this.modalCreateUpdateEventTitle = 'Update Event'
       this.modalCreateUpdateEventAction = this.eventUpdate
@@ -456,15 +461,6 @@ export default {
     updatePopover: function (info) {
       this.detachPopover(info)
       this.attachPopover(info, this.popoverRefs[info.event.id]._element)
-      // console.log(this.popoverRefs[eventId].tip)
-      // console.log(this.popoverRefs[eventId].element)
-      // console.log(this.popoverRefs[eventId]._element)
-      // console.log(this.popoverRefs[eventId]._config)
-      // this.popoverRefs[eventId]._config.content = function () {
-      //   return 'yo'
-      // }
-      // this.popoverRefs[eventId].hide()
-      // this.popoverRefs[eventId].show()
     },
     prepareHolidays: function () {
       let ph = new PublicHolidayApi();
