@@ -675,7 +675,7 @@ export default {
   color: #2c3e50;
 }
 
-li.list-group-item:hover, li.list-group-item .form-check:hover, li.list-group-item .form-check:hover label {
+li.list-group-item:hover {
   background-color: rgba(239, 235, 235, 0.99);
   cursor: pointer;
 }
@@ -683,10 +683,10 @@ li.list-group-item:hover, li.list-group-item .form-check:hover, li.list-group-it
 li.list-group-item.warning {
   background-color: rgba(250, 0, 0, 0.2);
 }
-/*TODO TASK GERER LES COULEURS */
-/*li.list-group-item.warning .form-check:hover  {*/
-/*  background-color: rgba(250, 0, 0, 0.2);*/
-/*}*/
+
+li.list-group-item.warning:hover {
+  background-color: rgba(250, 0, 0, 0.11);
+}
 
 #full-calendar button {
   text-transform: uppercase;
