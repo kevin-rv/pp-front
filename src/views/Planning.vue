@@ -27,7 +27,7 @@
     <ul class="list-group">
       <div>
         <label class="form-label">Contact</label>
-        <button type="button" class="bi bi-plus-circle border-0 bg-transparent" onclick="openModalAddContact"></button>
+        <button type="button" class="bi bi-plus-circle border-0 bg-transparent" @click="openModalAddContactEvent"></button>
       </div>
       <li class="list-group-item" v-for="(contact, index) in eventContacts" :key="index">{{contact.name}}
         <button type="button" class="btn btn-danger border-dark me-1 bi bi-x-octagon float-end" onclick="removeContactFromEvent"></button>
@@ -65,9 +65,9 @@
   </modal>
 
   <modal
-      title="Delete Task"
-      ref="modalDeleteTask"
-      :action-func="deleteTask"
+      :title="modalDeleteEventTaskTitle"
+      ref="modalDeleteEventTask"
+      :action-func="modalDeleteEventTaskAction"
       action-text="delete"
       button-action-class="btn-danger"
   >
@@ -75,18 +75,31 @@
   </modal>
 
   <modal
-      title="Delete Event"
-      ref="modalDeleteEvent"
-      :action-func="removeEvent"
-      action-text="delete"
-      button-action-class="btn-danger"
+      title="Add contact event"
+      ref="modalAddContactEvent"
+      :action-func="addContact"
+      action-text="save"
+      button-action-class="btn-info text-white"
   >
-    <slot><p>This action is definitive</p></slot>
+    <div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">
+
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="flexCheckContact" v-model="checkedContact">
+            <label class="form-check-label" for="flexCheckContact">
+              {{contact.name}}
+            </label>
+          </div>
+        </li>
+      </ul>
+    </div>
+
   </modal>
 
-<!--  TODO rassembler les actions de deletion en une seule-->
-
 <!-- TODO transformer en composant le offcanvas-->
+
+
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel" ref="offCanvas" >
     <div class="offcanvas-header card-header">
       <h5>
@@ -182,7 +195,6 @@ import Modal from "../components/Modal";
 import moment from 'moment'
 import PublicHolidayApi from "../api/publicHolidayApi";
 
-
 export default {
   name: "Planning",
   components: {
@@ -206,6 +218,11 @@ export default {
     done: null,
     doneLimitDate: null,
     taskUpdateDeleteId: null,
+    modalDeleteEventTaskTitle: '',
+    modalDeleteEventTaskAction: () => {
+
+    },
+    contact: null,
     holidays: [],
     popoverRefs: {},
     eventContacts: [],
@@ -233,6 +250,15 @@ export default {
       })
 
       return events.concat(this.holidays)
+    },
+
+    checkedContact: {
+      get: function () {
+        return this.contact !== null
+      },
+      set: function () {
+
+      }
     },
     calendarOptions: function () {
       return {
@@ -411,7 +437,7 @@ export default {
       this.planningApi.deleteEvent(this.$route.params.id, this.eventId)
           .then(() => {
             console.log(this.$refs)
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEventTask.$el)
             modal.hide()
             this.updatedEvent()
           })
@@ -423,10 +449,13 @@ export default {
     openModalDeleteEvent() {
       let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
       modalUpdate.hide()
-      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEvent.$el)
+      this.modalDeleteEventTaskTitle = 'Delete Event'
+      this.modalDeleteEventTaskAction = this.removeEvent
+      let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEventTask.$el)
       modal.show()
     },
     openOffCanvasTask() {
+      console.log(this.$refs.offCanvas)
       let offCanvasTask = this.$bootstrap.Offcanvas.getOrCreateInstance(this.$refs.offCanvas)
       offCanvasTask.show()
     },
@@ -509,7 +538,7 @@ export default {
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
       modal.show()
     },
-    // TODO Task interchangable
+    // TODO Task interchangable, pouvoir répéter une tache avec un button
     updateTask() {
       let task = {
         id: this.taskUpdateDeleteId,
@@ -573,7 +602,7 @@ export default {
       this.planningApi.deleteTask(this.$route.params.id, this.taskUpdateDeleteId)
           .then(() => {
             this.updatedTask()
-            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteTask.$el)
+            let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEventTask.$el)
             modal.hide()
           })
           .catch(message => {
@@ -586,11 +615,27 @@ export default {
     openModalDeleteTask() {
       let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateTask.$el)
       modalUpdate.hide()
-      let modalDelete = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteTask.$el)
+      this.modalDeleteEventTaskTitle = 'Delete Task'
+      this.modalDeleteEventTaskAction = this.deleteTask
+      let modalDelete = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalDeleteEventTask.$el)
       modalDelete.show()
     },
     taskIsWarning(task) {
       return moment(task.doneLimitDate).unix() <= moment().unix()
+    },
+
+    openModalAddContactEvent() {
+      let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+      modalUpdate.hide()
+      let modalAddContact = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalAddContactEvent.$el)
+      modalAddContact.show()
+    },
+
+    addContact() {
+
+    },
+    removeContactFromEvent() {
+
     }
   },
 
