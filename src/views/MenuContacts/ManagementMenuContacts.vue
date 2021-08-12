@@ -105,7 +105,12 @@ export default {
           .then(data => {
             this.updateAllContacts(data)
           })
-          .catch(() => {})
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
     },
     createContact() {
       let contact = {
@@ -209,7 +214,12 @@ export default {
           console.log(data)
           this.updateAllContacts(data)
         })
-        .catch(() => {})
+        .catch(message => {
+          this.addMessage({
+            message: message,
+            type: 'warning'
+          })
+        })
   },
 }
 </script>

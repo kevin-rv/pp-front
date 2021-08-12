@@ -50,11 +50,11 @@
 
     <div class="mb-3">
       <label class="form-label">Done Limit Date</label>
-      <datetime v-model="doneLimitDate" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" />  <!-- TODO problème recule d'un jour  -->
+      <datetime v-model="doneLimitDate" inputClass="form-control" title="Done Limit" type="date"/>  <!-- TODO problème recule d'un jour  -->
     </div>
     <div class="mb-3" v-if="checked && done">
       <label class="form-label">Done</label>
-      <datetime v-model="done" inputClass="form-control" title="Done Limit" type="date" :minuteStep="30" disabled/>
+      <datetime v-model="done" inputClass="form-control" title="Done Limit" type="date" disabled/>
     </div>
     <div class="form-check" v-if="modalCreateUpdateTaskDeleteIsActive">
       <input class="form-check-input" type="checkbox" id="flexCheck" v-model="checked">
@@ -83,11 +83,11 @@
   >
     <div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item" v-for="(contact, index) in contacts" :key="index">
+        <li class="list-group-item" v-for="(contact) in contactListCheckedFromEvent" :key="contact.id">
 
           <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="flexCheckContact" v-model="checkedContact">
-            <label class="form-check-label" for="flexCheckContact">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox" v-model="contact.checked" :checked="contact.checked">
               {{contact.name}}
             </label>
           </div>
@@ -229,6 +229,12 @@ export default {
   }),
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks', contacts: 'allContacts'}),
+    contactListCheckedFromEvent: function () {
+      console.log()
+        // return un tableau qui contient les contact et te dit si ils sont checkeé
+      return this.eventContacts !== null ? this.eventContacts : this.contacts
+
+    },
     checked: {
       get: function () {
         return this.done !== null
@@ -252,14 +258,6 @@ export default {
       return events.concat(this.holidays)
     },
 
-    checkedContact: {
-      get: function () {
-        return this.contact !== null
-      },
-      set: function () {
-
-      }
-    },
     calendarOptions: function () {
       return {
         plugins: [dayGridPlugin, timeGrid, interactionPlugin, bootstrapPlugin, listPlugin],
@@ -338,8 +336,11 @@ export default {
           .then(data => {
             this.updateAllTasks(data)
           })
-          .catch(() => {
-
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
     },
     updatedEvent() {
@@ -347,7 +348,11 @@ export default {
           .then(data => {
             this.updateAllEvents(data)
           })
-          .catch(() => {
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
     },
     eventChange: function (info) {
@@ -442,7 +447,10 @@ export default {
             this.updatedEvent()
           })
           .catch(message => {
-            console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
 
     },
@@ -632,7 +640,11 @@ export default {
     },
 
     addContact() {
-
+      let modalUpdate = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateEvent.$el)
+      modalUpdate.show()
+      console.log(this.$refs.modalAddContactEvent.$el)
+      let modalAddContact = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalAddContactEvent.$el)
+      modalAddContact.hide()
     },
     removeContactFromEvent() {
 
@@ -654,15 +666,21 @@ export default {
         .then(data => {
           this.updateAllTasks(data)
         })
-        .catch(() => {
-
+        .catch(message => {
+          this.addMessage({
+            message: message,
+            type: 'warning'
+          })
         })
     this.planningApi.getAllContact()
         .then(data => {
           this.updateAllContacts(data)
         })
-        .catch(() => {
-
+        .catch(message => {
+          this.addMessage({
+            message: message,
+            type: 'warning'
+          })
         })
     this.prepareHolidays()
 
@@ -687,6 +705,7 @@ li.list-group-item.warning {
 li.list-group-item.warning:hover {
   background-color: rgba(250, 0, 0, 0.11);
 }
+
 
 #full-calendar button {
   text-transform: uppercase;

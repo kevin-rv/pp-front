@@ -5,34 +5,38 @@
       <div class="card-body">
         <div class="control-group">
           <!-- Username -->
-          <label class="control-label"  for="username">Username</label>
-          <div class="controls">
-            <input type="text" id="username" name="username" placeholder="name" class="input-xlarge" v-model="name">
+          <label class="form-label">Username</label>
+          <div class="mb-3">
+            <input type="text" class="form-control"  v-model="name">
           </div>
         </div>
         <div class="control-group">
           <!-- E-mail -->
-          <label class="control-label" for="email">E-mail</label>
-          <div class="controls">
-            <input type="text" id="email" name="email" placeholder="email" class="input-xlarge" v-model="email">
+          <label class="form-label">E-mail</label>
+          <div class="mb-3">
+            <input type="text" class="form-control" v-model="email">
           </div>
         </div>
 
         <div class="control-group">
           <!-- Password-->
-          <label class="control-label" for="password">Password</label>
-          <div class="controls">
-            <input type="password" id="password" name="password" placeholder="password" class="input-xlarge" v-model="password">
+          <label class="form-label">Password</label>
+          <div class="mb-3">
+            <input type="password" class="form-control" v-model="password">
           </div>
         </div>
 
         <div class="control-group">
           <!-- Password -->
-          <label class="control-label"  for="password_confirm">Password (Confirm)</label>
-          <div class="controls">
-            <input type="password" id="password_confirm" name="password_confirm" placeholder="confirm password" class="input-xlarge">
+          <label class="form-label" >Password (Confirm)</label>
+          <div class="mb-3">
+            <input type="password" class="form-control">
             <p class="help-block">Please confirm password</p>
           </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Birthday</label>
+          <datetime v-model="birthday" inputClass="form-control" title="Birthday" type="date" />  <!-- TODO problème recule d'un jour  -->
         </div>
         <button type="button" class="btn btn-primary mb-3" @click="submit">register</button>
       </div>
@@ -42,6 +46,7 @@
 
 <script>
 import {mapGetters} from "vuex";
+import moment from 'moment'
 
 export default {
   name: "Signin",
@@ -50,6 +55,7 @@ export default {
       name: '',
       email: '',
       password: '',
+      birthday: null,
     }
   },
   computed: {
@@ -58,7 +64,7 @@ export default {
 
   methods: {
     submit() {
-      this.planningApi.createOneUser(this.name, this.email, this.password)
+      this.planningApi.createOneUser(this.name, this.email, this.password, moment(this.birthday).format('YYYY-MM-DD'))
           .then(() => {
             this.$router.push({name: 'Login'})
           })

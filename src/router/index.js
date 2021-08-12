@@ -6,7 +6,6 @@ import ManagementMenuPlanning from "../views/MenuPlannings/ManagementMenuPlannin
 import store from '../store/index'
 import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
-import ManagementMenuTasks from "../views/MenuTasks/ManagementMenuTasks";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
 import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
 
@@ -50,12 +49,6 @@ const routes = [
     path: '/menuPlanning',
     name: 'MenuPlanning',
     component: ManagementMenuPlanning,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/planning/:id/menuTasks',
-    name: 'MenuTasks',
-    component: ManagementMenuTasks,
     meta: { requiresAuth: true }
   },
   {
