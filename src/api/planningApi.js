@@ -91,7 +91,16 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+    getUser() {
+        return axios
+            .get(this.rootPath + '/user', {headers: { 'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
 
+    }
     getAllPlannings()
     {
         console.log(this.token)
@@ -129,7 +138,18 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
-
+    updateUser(name, email, birthday, phoneNumber, home, work)
+    {
+        return axios
+            .patch(this.rootPath + '/user', qs.stringify({name, email, birthday, phoneNumber, home, work}), {headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
     updatePlanning(id, name)
     {
         return axios
@@ -183,7 +203,18 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
-
+    deleteUser()
+    {
+        return axios
+            .delete(this.rootPath + '/user' ,{headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'authorization': 'Bearer ' + this.token }}
+            )
+            .then((response) => {
+                return response.data
+            })
+            .catch(this._errorManagement)
+    }
     deletePlanning(id)
     {
         return axios

@@ -28,7 +28,7 @@
 
         <div class="control-group">
           <!-- Password -->
-          <label class="form-label" >Password (Confirm)</label>
+          <label class="form-label" >Password (Confirm)</label>  <!-- TODO à voir comment le gérer -->
           <div class="mb-3">
             <input type="password" class="form-control">
             <p class="help-block">Please confirm password</p>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import moment from 'moment'
 
 export default {
@@ -63,6 +63,9 @@ export default {
   },
 
   methods: {
+    ...mapActions({
+      addMessage: 'addMessage'
+    }),
     submit() {
       this.planningApi.createOneUser(this.name, this.email, this.password, moment(this.birthday).format('YYYY-MM-DD'))
           .then(() => {
@@ -70,6 +73,10 @@ export default {
           })
           .catch(message => {
             console.log(message)
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
           })
     }
   }

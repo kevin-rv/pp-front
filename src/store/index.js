@@ -18,6 +18,9 @@ export default createStore({
             state.token = token;
             state.planningApi.setToken(token)
         },
+        UPDATE_USER(state, user) {
+            state.user = user
+        },
         UPDATE_ALL_PLANNING(state, plannings) {
             state.plannings = plannings;
         },
@@ -48,6 +51,9 @@ export default createStore({
             localStorage.setItem('token', token)
             commit('UPDATE_TOKEN', token)
         },
+        updateUser({commit}, user) {
+            commit('UPDATE_USER', user)
+        },
         updateAllPlannings({commit}, plannings) {
             commit('UPDATE_ALL_PLANNING', plannings)
         },
@@ -70,6 +76,9 @@ export default createStore({
     getters: {
         token(state) {
             return state.token
+        },
+        user(state) {
+            return state.user
         },
         planningApi(state) {
             return state.planningApi

@@ -8,6 +8,7 @@ import Planning from "../views/Planning";
 import ManagementMenuContacts from "../views/MenuContacts/ManagementMenuContacts";
 import FirstLoginAddContact from "../views/FirstLoginAddContact";
 import firstLoginUpdateUser from "../views/firstLoginUpdateUser";
+import Account from "../views/Account";
 
 const routes = [
   {
@@ -32,6 +33,12 @@ const routes = [
     path: '/firstLoginContact',
     name: 'firstContact',
     component: FirstLoginAddContact,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/account',
+    name: 'account',
+    component: Account,
     meta: { requiresAuth: true }
   },
   {

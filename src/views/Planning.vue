@@ -87,7 +87,7 @@
 
           <div class="form-check">
             <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" v-model="contact.checked" :checked="contact.checked">
+              <input class="form-check-input" type="checkbox" v-model="contact.checked" :checked="contact.checked">  <!-- TODO voir comment le gérer -->
               {{contact.name}}
             </label>
           </div>
