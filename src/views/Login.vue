@@ -35,15 +35,18 @@ export default {
   },
 
   methods: {
-    ...mapActions({updateToken: 'updateToken'}),
+    ...mapActions({updateToken: 'updateToken', addMessage: 'addMessage'}),
     login() {
       api.login(this.email, this.password).then(token => {
         this.updateToken(token)
         if (token != null) {
           this.$router.push({name: 'MenuPlanning'})
         }
-      }).catch((message) => {
-        console.log(message)
+      }).catch(message => {
+        this.addMessage({
+          message: message,
+          type: 'danger'
+        })
       })
     },
   }

@@ -20,10 +20,9 @@ export default {
   name: "Navbar",
   computed: {
     ...mapGetters(['isConnected', 'isLogOut'])
-  }
+  },
 }
 </script>
-
 <style scoped lang="scss">
 
 #nav {

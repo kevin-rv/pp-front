@@ -12,7 +12,7 @@
   <div>
     <div class="card">
       <div class="card-header text-center">
-        <h5>  <!-- TODO affichage de l'user et update à terminer -->
+        <h5>  <!-- TODO  update à terminer  gestion de mdp -->
           My Account
         </h5>
         <button class="bi bi-pencil-fill border-0 bg-transparent" @click="dislockInputUser" ></button>
@@ -108,6 +108,7 @@ export default {
     Modal
   },
   data: () => ({
+    id: null,
     name: '',
     email: '',
     password: '',
