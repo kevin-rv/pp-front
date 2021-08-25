@@ -67,7 +67,6 @@ export default {
     updated() {
       this.planningApi.getAllPlannings()
           .then(data => {
-            console.log(data)
             this.updateAllPlannings(data)
           })
           .catch(() => {})
@@ -101,7 +100,6 @@ export default {
             modal.hide()
           })
           .catch(message => {
-            console.log(message)
             this.addMessage({
               message: message,
               type: 'danger'
@@ -116,7 +114,6 @@ export default {
             modal.hide()
           })
           .catch(message => {
-            console.log(message)
             this.addMessage({
               message: message,
               type: 'danger'
@@ -135,7 +132,6 @@ export default {
             modal.hide()
           })
           .catch(message => {
-            console.log(message)
             this.addMessage({
               message: message,
               type: 'danger'

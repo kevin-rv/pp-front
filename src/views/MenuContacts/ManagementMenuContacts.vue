@@ -145,6 +145,7 @@ export default {
       this.work = ''
       this.modalCreateUpdateContactTitle = 'Create Contact'
       this.modalCreateUpdateContactAction = this.createContact
+      this.modalCreateUpdateContactDeleteIsActive = false
       let modal = this.$bootstrap.Modal.getOrCreateInstance(this.$refs.modalCreateUpdateContact.$el)
       modal.show()
     },
