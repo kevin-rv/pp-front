@@ -103,7 +103,6 @@ class planningApi
     }
     getAllPlannings()
     {
-        console.log(this.token)
         return axios
             .get(this.rootPath + '/planning', {headers: { 'authorization': 'Bearer ' + this.token }})
             .then((response) => {

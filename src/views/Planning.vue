@@ -227,13 +227,25 @@ export default {
     popoverRefs: {},
     eventContacts: [],
   }),
+  watch: {
+    $route(to, from) {
+      console.log(to, from, this)
+      if (to.params.id !== from.params.id) {
+        this.init()
+      }
+    },
+  },
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks', contacts: 'allContacts'}),
     contactListCheckedFromEvent: function () {
-      console.log()
-        // return un tableau qui contient les contact et te dit si ils sont checkeé
-      return this.eventContacts !== null ? this.eventContacts : this.contacts
+      let contacts = [];
+      contacts.push(this.checked)
+      console.log(contacts)
+      for (contacts = this.contacts; contacts === contacts.id in this.eventContacts; contacts.checked = true)
 
+      console.log(contacts.checked)
+      return contacts;
+        // return un tableau qui contient les contact et te dit si ils sont checkeé
     },
     checked: {
       get: function () {
@@ -648,47 +660,51 @@ export default {
     },
     removeContactFromEvent() {
 
+    },
+    init() {
+      this.planningApi.getPlanningAllEvents(this.$route.params.id)
+          .then(data => {
+            this.updateAllEvents(data)
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'warning'
+            })
+          })
+      this.planningApi.getPlanningAllTasks(this.$route.params.id)
+          .then(data => {
+            this.updateAllTasks(data)
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'warning'
+            })
+          })
+      this.planningApi.getAllContact()
+          .then(data => {
+            this.updateAllContacts(data)
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'warning'
+            })
+          })
+      this.prepareHolidays()
+
     }
   },
 
   beforeMount() {
-    this.planningApi.getPlanningAllEvents(this.$route.params.id)
-        .then(data => {
-          this.updateAllEvents(data)
-        })
-        .catch(message => {
-          this.addMessage({
-            message: message,
-            type: 'warning'
-          })
-        })
-    this.planningApi.getPlanningAllTasks(this.$route.params.id)
-        .then(data => {
-          this.updateAllTasks(data)
-        })
-        .catch(message => {
-          this.addMessage({
-            message: message,
-            type: 'warning'
-          })
-        })
-    this.planningApi.getAllContact()
-        .then(data => {
-          this.updateAllContacts(data)
-        })
-        .catch(message => {
-          this.addMessage({
-            message: message,
-            type: 'warning'
-          })
-        })
-    this.prepareHolidays()
-
+      this.init()
   },
 }
 </script>
 
 <style>
+
 #full-calendar a {
   color: #2c3e50;
 }

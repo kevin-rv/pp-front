@@ -71,32 +71,29 @@
       <router-link v-if="isLogOut" class="m-3" to="/">Home</router-link>
       <router-link v-if="isLogOut" class="m-3" to="/login">Login</router-link>
       <router-link v-if="isLogOut" class="m-3" to="/signin">Signin</router-link>
-      <router-link v-if="isConnected" class="m-3" to="/MenuPlanning">Mes planning</router-link>
-      <router-link v-if="isConnected" class="m-3" to="/MenuContacts">Contact</router-link>
-      <router-link v-if="isConnected" class="m-3" to="/account">Account</router-link>
-      <router-link class="m-3" to="/about">About</router-link>
-      <div  v-if="isConnected">
+      <div v-if="isConnected" class="me-3" style="display: inline-block">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Planning
+            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">
+              Mes Planning
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDarkDropdownMenuLink">
-              <li @click="openModalCreatePlanning"><a id="newPlanning" class="dropdown-item">New planning</a> <hr class="dropdown-divider"></li>
-              <li v-for="(planning, index) in plannings" :key="index">
+              <li @click="openModalCreatePlanning"><a id="newPlanning" class="dropdown-item text-center">New planning</a> <hr class="dropdown-divider"></li>
+              <li  v-for="(planning, index) in plannings" :key="index">
                 <a class="dropdown-item text-dark">{{planning.name}}
                   <div class="d-flex float-end">
-                  <router-link :to="{name: 'planning', params: { id: planning.id }}" class="">
-                    <i class="bi-eye m-2"></i>
-                  </router-link>
-                  <i class="bi-gear" @click="openModalUpdatePlanning(planning)"></i></div> <!-- TODO router link a revoir -->
+                    <router-link :to="{name: 'planning', params: { id: planning.id }}" class="">
+                      <i class="bi-eye m-2"></i>
+                    </router-link>
+                    <i class="bi-gear" @click="openModalUpdatePlanning(planning)"></i></div>
                 </a><hr class="dropdown-divider">
               </li>
+              <li class="text-center"><router-link v-if="isConnected" to="/MenuPlanning">Mes planning</router-link></li>
             </ul>
           </li>
         </ul>
       </div>
-      <div  v-if="isConnected">
+      <div v-if="isConnected" style="display: inline-block">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -104,11 +101,13 @@
             </a>
             <ul class="dropdown-menu overflow-auto" aria-labelledby="navbarDarkDropdownMenuLink">
               <li @click="openModalCreateContact"><a id="newContact" class="dropdown-item">New contact</a> <hr class="dropdown-divider"></li>
-              <li v-for="(contact, index) in contacts" :key="index" @click="openModalUpdateContact(contact)"><a class="dropdown-item text-dark">{{contact.name}}</a><hr class="dropdown-divider"></li>
+              <li class="text-center"><router-link v-if="isConnected"  to="/MenuContacts">Liste de contacts</router-link></li>
             </ul>
           </li>
         </ul>
       </div>
+      <router-link v-if="isConnected" class="m-3" to="/account">Account</router-link>
+      <router-link class="m-3" to="/about">About</router-link>
       <router-link v-if="isConnected"  class="m-3 bi bi-box-arrow-in-right" to="/logout"></router-link>
     </div>
   </div>
@@ -389,7 +388,12 @@ a.dropdown-item:hover {
 #nav {
   padding: 10px;
   background: #454140;
-
+li a {
+  color: black;
+}
+  a.nav-link.dropdown-toggle {
+    color: white;
+  }
   a {
     font-weight: bold;
     color: white;
