@@ -37,24 +37,24 @@
           <!-- Old Password-->
           <label class="form-label">Old Password</label>
           <div class="mb-3">
-            <input type="password" class="form-control" v-model="password">
+            <input type="password" class="form-control" >
           </div>
         </div>
         <div v-if="updateInput">
 
-          <!-- Password-->
+          <!-- New Password-->
           <label class="form-label">New Password</label>
           <div class="mb-3">
-            <input type="password" class="form-control" v-model="password">
+            <input id="password" name="password" type="password" class="form-control" v-model="password" v-on:keyup="check">
           </div>
         </div>
 
         <div v-if="updateInput">
-          <!-- Password -->
+          <!-- Password confirm -->
           <label class="form-label" >Password (Confirm)</label>  <!-- TODO à voir comment le gérer -->
           <div class="mb-3">
-            <input type="password" class="form-control" >
-            <p class="help-block">Please confirm password</p>
+            <input id="confirm_password" name="confirm_password" type="password" class="form-control" v-on:keyup="check" >
+            <p class="help-block">Please confirm password  <span id='message'></span> </p>
           </div>
         </div>
         <div class="mb-3">
@@ -174,6 +174,18 @@ export default {
             })
           })
     },
+    check: function () {
+      if (document.getElementById('password').value ===
+          document.getElementById('confirm_password').value
+          && document.getElementById('password').value
+          && document.getElementById('confirm_password').value  !== null) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+      } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+      }
+    }
   },
 
   beforeMount() {

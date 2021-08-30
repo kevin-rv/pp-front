@@ -339,31 +339,44 @@ export default {
     },
   },
   beforeMount() {
-    this.planningApi.getAllContact()
-        .then(data => {
-          this.updateAllContacts(data)
-        })
-        .catch(message => {
-          this.addMessage({
-            message: message,
-            type: 'warning'
+    if (this.isConnected) {
+
+      this.planningApi.getAllContact()
+          .then(data => {
+            this.updateAllContacts(data)
           })
-        })
-    this.planningApi.getAllPlannings()
-        .then(data => {
-          this.updateAllPlannings(data)
-        })
-        .catch(message => {
-          this.addMessage({
-            message: message,
-            type: 'danger'
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'warning'
+            })
           })
-        })
+      this.planningApi.getAllPlannings()
+          .then(data => {
+            this.updateAllPlannings(data)
+          })
+          .catch(message => {
+            this.addMessage({
+              message: message,
+              type: 'danger'
+            })
+          })
+    }
+
   },
 }
 </script>
 <style scoped lang="scss">
 
+a.dropdown-item.text-dark:active {
+  background: #c5c0c0;
+}
+a#newPlanning.dropdown-item:active {
+  background: #c5c0c0;
+}
+a#newContact.dropdown-item:active {
+  background: #c5c0c0;
+}
 #newPlanning  {
   color: red !important;
 }

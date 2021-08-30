@@ -22,7 +22,7 @@
           <!-- Password-->
           <label class="form-label">Password</label>
           <div class="mb-3">
-            <input type="password" class="form-control" v-model="password">
+            <input id="password" name="password" type="password" class="form-control" v-model="password" v-on:keyup="check">
           </div>
         </div>
 
@@ -30,8 +30,9 @@
           <!-- Password -->
           <label class="form-label" >Password (Confirm)</label>  <!-- TODO à voir comment le gérer -->
           <div class="mb-3">
-            <input type="password" class="form-control">
-            <p class="help-block">Please confirm password</p>
+            <input id="confirm_password" name="confirm_password" type="password" class="form-control" v-on:keyup="check">
+            <p class="help-block">Please confirm password
+              <span id='message'></span></p>
           </div>
         </div>
         <div class="mb-3">
@@ -42,6 +43,7 @@
       </div>
     </div>
   </div>
+<!--  TODO à essayer pour la confirmation de mdp https://stackoverflow.com/questions/21727317/how-to-check-confirm-password-field-in-form-without-reloading-page/21727518-->
 </template>
 
 <script>
@@ -78,6 +80,18 @@ export default {
               type: 'danger'
             })
           })
+    },
+    check: function () {
+      if (document.getElementById('password').value ===
+          document.getElementById('confirm_password').value
+          && document.getElementById('password').value
+          && document.getElementById('confirm_password').value  !== null) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+      } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+      }
     }
   }
 }
