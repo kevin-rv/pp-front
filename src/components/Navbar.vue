@@ -82,7 +82,7 @@
               <li  v-for="(planning, index) in plannings" :key="index">
                 <a class="dropdown-item text-dark">{{planning.name}}
                   <div class="d-flex float-end">
-                    <router-link :to="{name: 'planning', params: { id: planning.id }}" class="">
+                    <router-link :to="{name: 'planning', params: { id: planning.id }}">
                       <i class="bi-eye m-2"></i>
                     </router-link>
                     <i class="bi-gear" @click="openModalUpdatePlanning(planning)"></i></div>

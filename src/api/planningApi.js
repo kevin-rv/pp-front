@@ -27,10 +27,10 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    createOneUser(name, email, password, birthday)
+    createOneUser(name, email, password, confirmPassword, birthday)
     {
         return axios
-            .post(this.rootPath + '/user', qs.stringify({name, email, password, birthday}), {headers: {
+            .post(this.rootPath + '/user', qs.stringify({name, email, password, confirmPassword, birthday}), {headers: {
                     'content-type': 'application/x-www-form-urlencoded'}}
             )
             .then((response) => {

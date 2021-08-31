@@ -51,10 +51,14 @@
 
         <div v-if="updateInput">
           <!-- Password confirm -->
-          <label class="form-label" >Password (Confirm)</label>  <!-- TODO à voir comment le gérer -->
+          <label class="form-label" >Password (Confirm)</label>
           <div class="mb-3">
-            <input id="confirm_password" name="confirm_password" type="password" class="form-control" v-on:keyup="check" >
-            <p class="help-block">Please confirm password  <span id='message'></span> </p>
+            <input type="password" class="form-control" v-model="confirmPassword">
+            <p class="help-block">Please confirm password
+              <span v-if="confirmPassword === password && confirmPassword === ''" class="passwordEmpty">Empty</span>
+              <span v-else-if="confirmPassword === password" class="passwordMatching">Matching</span>
+              <span v-else class="passwordNotMatching">Not Matching</span>
+            </p>
           </div>
         </div>
         <div class="mb-3">
@@ -113,6 +117,7 @@ export default {
     email: '',
     password: '',
     phoneNumber: '',
+    confirmPassword: '',
     birthday: null,
     work: '',
     home: '',
@@ -174,18 +179,6 @@ export default {
             })
           })
     },
-    check: function () {
-      if (document.getElementById('password').value ===
-          document.getElementById('confirm_password').value
-          && document.getElementById('password').value
-          && document.getElementById('confirm_password').value  !== null) {
-        document.getElementById('message').style.color = 'green';
-        document.getElementById('message').innerHTML = 'matching';
-      } else {
-        document.getElementById('message').style.color = 'red';
-        document.getElementById('message').innerHTML = 'not matching';
-      }
-    }
   },
 
   beforeMount() {
@@ -211,5 +204,13 @@ export default {
 </script>
 
 <style scoped>
-
+.passwordMatching {
+  color: green;
+}
+.passwordEmpty {
+  color: orange;
+}
+.passwordNotMatching {
+  color: red;
+}
 </style>

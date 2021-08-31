@@ -24,15 +24,15 @@
       <datetime v-model="endDatetime" inputClass="form-control" title="Event end" type="datetime" :minuteStep="30" />
     </div>
     <div>
-    <ul class="list-group">
-      <div>
-        <label class="form-label">Contact</label>
-        <button type="button" class="bi bi-plus-circle border-0 bg-transparent" @click="openModalAddContactEvent"></button>
-      </div>
-      <li class="list-group-item" v-for="(contact, index) in eventContacts" :key="index">{{contact.name}}
-        <button type="button" class="btn btn-danger border-dark me-1 bi bi-x-octagon float-end" onclick="removeContactFromEvent"></button>
-      </li>
-    </ul>
+      <ul class="list-group">
+        <div>
+          <label class="form-label">Contact</label>
+          <button type="button" class="bi bi-plus-circle border-0 bg-transparent" @click="openModalAddContactEvent"></button>
+        </div>
+        <li class="list-group-item" v-for="(contact, index) in eventContacts" :key="index">{{contact.name}}
+          <button type="button" class="btn btn-danger border-dark me-1 bi bi-x-octagon float-end" onclick="removeContactFromEvent"></button>
+        </li>
+      </ul>
     </div>
   </modal>
 
@@ -97,7 +97,7 @@
 
   </modal>
 
-<!-- TODO transformer en composant le offcanvas-->
+  <!-- TODO transformer en composant le offcanvas-->
 
 
   <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" aria-labelledby="offcanvasScrollingLabel" ref="offCanvas" >
@@ -229,23 +229,37 @@ export default {
   }),
   watch: {
     $route(to, from) {
-      console.log(to, from, this)
-      if (to.params.id !== from.params.id) {
+      console.log(to, from)
+      if (to.name === from.name && to.params.id !== from.params.id) {
         this.init()
       }
     },
+    contactListCheckedFromEvent: {
+      deep: true,
+      handler(newValue, oldValue) {
+          console.log(newValue, oldValue)
+      }
+    }
   },
   computed: {
     ...mapGetters({planningApi: 'planningApi', events: 'allEvents', tasks: 'allTasks', contacts: 'allContacts'}),
-    contactListCheckedFromEvent: function () {
-      let contacts = [];
-      contacts.push(this.checked)
-      console.log(contacts)
-      for (contacts = this.contacts; contacts === contacts.id in this.eventContacts; contacts.checked = true)
+    contactListCheckedFromEvent: {
+      get: function () {
+        let contacts = [];
+        this.contacts.forEach(contact => {
+          let checked = false
+          for (let i = 0; i < this.eventContacts.length; ++i) {
+            if (this.eventContacts[i].id === contact.id) {
+              checked = true;
+              break;
+            }
+          }
+          contact.checked = checked
+          contacts.push(contact)
+        })
 
-      console.log(contacts.checked)
-      return contacts;
-        // return un tableau qui contient les contact et te dit si ils sont checkeé
+        return contacts;
+      },
     },
     checked: {
       get: function () {
@@ -698,7 +712,7 @@ export default {
   },
 
   beforeMount() {
-      this.init()
+    this.init()
   },
 }
 </script>
