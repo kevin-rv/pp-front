@@ -4,16 +4,14 @@
   <div class="container-fluid p-0 min-vh-100">
     <router-view/>
   </div>
-  <Footer/>
 </template>
 <script>
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import AlertCenter from "./components/AlertCenter";
 
 export default {
   name: "Base",
-  components: {AlertCenter, Footer, Navbar},
+  components: {AlertCenter, Navbar},
 }
 </script>
 <style lang="scss">
@@ -36,9 +34,5 @@ html {
   background-image: url("../public/img/triangle_background.jpg");
   background-size: cover;
 }
-#footer {
-  background: #454140;
-  text-align: center;
-  color: white;
-}
+
 </style>

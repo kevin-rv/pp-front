@@ -14,7 +14,7 @@
           <!-- E-mail -->
           <label class="form-label">E-mail</label>
           <div class="mb-3">
-            <input type="text" class="form-control" v-model="email">
+            <input type="email" class="form-control" v-model="email">
           </div>
         </div>
 

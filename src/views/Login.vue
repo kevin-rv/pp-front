@@ -12,7 +12,7 @@
           <label for="floatingPassword">Password</label>
         </div>
         <div class="d-flex justify-content-center">
-        <a href="#" class="btn btn-primary mt-3" @click="login">Login</a>
+          <button type="button" class="btn btn-primary mt-3" @click="login">Login</button>
         </div>
       </div>
     </div>

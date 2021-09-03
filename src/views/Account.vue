@@ -29,7 +29,7 @@
           <!-- E-mail -->
           <label class="form-label">E-mail</label>
           <div class="mb-3"> <!-- TODO problème bad credential après l'update -->
-            <input type="text" class="form-control" v-model="email" :disabled="disabled">
+            <input type="text" class="form-control" v-model="email" disabled>
           </div>
         </div>
 
@@ -104,8 +104,6 @@
 import {mapActions, mapGetters} from "vuex";
 import Modal from "../components/Modal";
 import moment from "moment";
-import router from "../router";
-
 export default {
   name: "Account",
   components: {
@@ -170,7 +168,7 @@ export default {
       this.planningApi.deleteUser()
           .then(data => {
             this.updateUser(data)
-            router.push('Login')
+           this.$router.push({name: 'Logout'})
           })
           .catch(message => {
             this.addMessage({

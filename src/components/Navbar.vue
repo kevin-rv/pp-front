@@ -107,7 +107,6 @@
         </ul>
       </div>
       <router-link v-if="isConnected" class="m-3" to="/account">Account</router-link>
-      <router-link class="m-3" to="/about">About</router-link>
       <router-link v-if="isConnected"  class="m-3 bi bi-box-arrow-in-right" to="/logout"></router-link>
     </div>
   </div>

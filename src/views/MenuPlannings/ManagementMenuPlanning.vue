@@ -33,7 +33,7 @@
           <h5 class="card-title flex-grow-1" style="word-break: break-all">{{ planning.name }}</h5>
         </div>
         <router-link :to="{name: 'planning', params: { id: planning.id }}" class="btn btn-info text-white mt-2 mb-2 border-dark me-1">Voir</router-link>
-        <button type="button" class="btn btn-secondary border-dark mt-2 mb-2 me-1" @click="openModalUpdatePlanning(planning)">Modifier</button>
+        <button type="button" class="btn btn-secondary border-dark mt-2 mb-2 me-1 bi-gear" @click="openModalUpdatePlanning(planning)"></button>
         <button type="button" class="btn btn-danger mt-2 mb-2 border-dark me-1 bi bi-x-octagon" @click="openModalDeletePlanning(planning.id)"></button>
       </div>
     </div>
