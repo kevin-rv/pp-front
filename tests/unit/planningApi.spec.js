@@ -224,8 +224,6 @@ describe('Planning Api', () => {
         })
     });
 
-
-
     it('create contact fail phoneNumber format', function () {
         return token(currentUserEmail).then(planningApi => {
             const contact = {
@@ -376,7 +374,7 @@ describe('Planning Api', () => {
     //
     //         }
     //         return planningApi.createOneTask(createdPlanningId,task).catch(reason => {
-    //             expect(reason.message).equal('birthday MUST to be in format yyyy-mm-dd', reason)
+    //             expect(reason.message).equal('doneLimitDate MUST to be in format yyyy-mm-dd', reason)
     //         })
     //     })
     // });
@@ -391,9 +389,7 @@ describe('Planning Api', () => {
 
             }
             return planningApi.updateTask(createdPlanningId,task).then((data) => {
-                expect(data).to.be.eql({
-                    ...task
-                });
+                expect(data).to.be.eql(task);
             })
         })
     });
@@ -429,29 +425,26 @@ describe('Planning Api', () => {
                 contacts: []
             }
             return planningApi.updateEvent(createdPlanningId,event).then((data) => {
-                expect(data).to.be.eql({
-                    ...event
-                });
+                expect(data).to.be.eql(event);
             })
         })
     });
 
 
-
-    // TODO neytwork config look around nginx config
-    // it('delete user', function (done) {
-    //     token(currentUserEmail).then(planningApi => {
-    //         return planningApi.getUser().then(user => {
-    //             setTimeout(() => {
-    //                 return planningApi.deleteUser().then(data => {
-    //                     expect(data).to.be.eql(user);
-    //                     return planningApi.setToken().login(currentUserEmail, validPassword).then(token => {
-    //                         expect(token).to.match(/[a-zA-Z0-9_.]+/)
-    //                         done()
-    //                     })
-    //                 })
-    //             }, 500)
-    //         })
-    //     })
-    // });
+    it('delete user', function (done) {
+        token(currentUserEmail).then(planningApi => {
+            return planningApi.getUser().then(user => {
+                return planningApi.deleteUser().then(data => {
+                    expect(data).to.be.eql(user);
+                    let message = '';
+                    return planningApi.setToken().login(currentUserEmail, validPassword).catch(reason => {
+                        message = reason.message
+                    }).finally(() => {
+                        expect(message).equal('Bad credentials')
+                        done()
+                    })
+                })
+            })
+        })
+    });
 })

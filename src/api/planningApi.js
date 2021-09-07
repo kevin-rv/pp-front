@@ -270,7 +270,7 @@ class planningApi
     _errorManagement(error)
     {
 
-        console.log(error)
+        // console.log(error)
 
         if (error.response) {
             throw Error(error.response.data.error || 'unknown error')

@@ -7,7 +7,7 @@
           <!-- Username -->
           <label class="form-label">Username</label>
           <div class="mb-3">
-            <input type="text" class="form-control"  v-model="name">
+            <input type="text" class="form-control" v-model="name">
           </div>
         </div>
         <div class="control-group">
