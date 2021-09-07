@@ -162,7 +162,7 @@ class planningApi
             .catch(this._errorManagement)
     }
 
-    updateContact(contactId, contact)
+    updateContact(contactId, contact)  // TODO "contactId" simplifié et faire la modif partout
     {
         return axios
             .patch(this.rootPath + '/contact/' + contactId , qs.stringify(contact), {headers: {
@@ -202,6 +202,7 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+
     deleteUser()
     {
         return axios
@@ -214,6 +215,7 @@ class planningApi
             })
             .catch(this._errorManagement)
     }
+
     deletePlanning(id)
     {
         return axios
@@ -267,6 +269,9 @@ class planningApi
 
     _errorManagement(error)
     {
+
+        console.log(error)
+
         if (error.response) {
             throw Error(error.response.data.error || 'unknown error')
         } else if (error.request) {
