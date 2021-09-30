@@ -6,6 +6,7 @@ faker.locale = "fr"
 // import axios from 'axios'
 // axios.defaults.adapter = require('axios/lib/adapters/http');
 import moment from 'moment'
+
 describe('Planning Api', () => {
 
     // const validEmail = 'email_3@email.com'
@@ -355,7 +356,14 @@ describe('Planning Api', () => {
                 doneLimitDate: moment(faker.datatype.datetime()).format('YYYY-MM-DD')
 
             }
-            return planningApi.createOneTask(createdPlanningId,task).then((data) => {
+            planningApi.createOneTask(createdPlanningId,task).then((data) => {
+                createdTaskId = data.id
+                expect(data).to.be.eql({
+                    id: data.id,
+                    ...task
+                });
+            })
+            planningApi.createOneTask(createdPlanningId,task).then((data) => {
                 createdTaskId = data.id
                 expect(data).to.be.eql({
                     id: data.id,
@@ -365,19 +373,39 @@ describe('Planning Api', () => {
         })
     });
 
-    // it('create one tasks fail date format', function () {
-    //     return token(currentUserEmail).then(planningApi => {
-    //         let task = {
-    //             shortDescription: faker.name.findName(),
-    //             done: 'azerty',
-    //             doneLimitDate: moment(faker.datatype.datetime()).format('YYYY-MM-DD')
-    //
-    //         }
-    //         return planningApi.createOneTask(createdPlanningId,task).catch(reason => {
-    //             expect(reason.message).equal('doneLimitDate MUST to be in format yyyy-mm-dd', reason)
-    //         })
-    //     })
-    // });
+    it('create one tasks fail done date format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let task = {
+                shortDescription: faker.name.findName(),
+                done: 'bad',
+                doneLimitDate: moment(faker.datatype.datetime()).format('YYYY-MM-DD')
+
+            }
+            let message = ''
+            return planningApi.createOneTask(createdPlanningId,task).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('done MUST to be in format yyyy-mm-dd')
+            })
+        })
+    });
+
+    it('create one tasks fail doneLimitDate date format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let task = {
+                shortDescription: faker.name.findName(),
+                done: moment(faker.datatype.datetime()).format('YYYY-MM-DD'),
+                doneLimitDate: 'bad',
+
+            }
+            let message = ''
+            return planningApi.createOneTask(createdPlanningId,task).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('doneLimitDate MUST to be in format yyyy-mm-dd')
+            })
+        })
+    });
 
     it('update  one task', function () {
         return token(currentUserEmail).then(planningApi => {
@@ -390,6 +418,42 @@ describe('Planning Api', () => {
             }
             return planningApi.updateTask(createdPlanningId,task).then((data) => {
                 expect(data).to.be.eql(task);
+            })
+        })
+    });
+
+    it('update one tasks fail done date format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let task = {
+                id: createdTaskId,
+                shortDescription: faker.name.findName(),
+                done: 'bad',
+                doneLimitDate: moment(faker.datatype.datetime()).format('YYYY-MM-DD')
+
+            }
+            let message = ''
+            return planningApi.updateTask(createdPlanningId,task).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('done MUST to be in format yyyy-mm-dd')
+            })
+        })
+    });
+
+    it('update one tasks fail doneLimitDate date format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let task = {
+                id: createdTaskId,
+                shortDescription: faker.name.findName(),
+                done: moment(faker.datatype.datetime()).format('YYYY-MM-DD'),
+                doneLimitDate: 'bad',
+
+            }
+            let message = ''
+            return planningApi.updateTask(createdPlanningId,task).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('doneLimitDate MUST to be in format yyyy-mm-dd')
             })
         })
     });
@@ -414,6 +478,43 @@ describe('Planning Api', () => {
         })
     });
 
+
+    it('create  one event fail startDatetime format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let event = {
+                shortDescription: faker.name.findName(),
+                fullDescription: faker.name.findName(),
+                startDatetime: 'bad',
+                endDatetime: moment(faker.datatype.datetime()).format('YYYY-MM-DDTHH:mm:ss+00:00'),
+                contacts: []
+            }
+            let message = ''
+            return planningApi.createOneEvent(createdPlanningId,event).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('startDatetime MUST to be in format YYYY-MM-DDThh:mm:ss[+/-]hh:mm')
+            })
+        })
+    });
+
+    it('create  one event fail endDatetime format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let event = {
+                shortDescription: faker.name.findName(),
+                fullDescription: faker.name.findName(),
+                startDatetime: moment(faker.datatype.datetime()).format('YYYY-MM-DDTHH:mm:ss+00:00'),
+                endDatetime: 'bad',
+                contacts: []
+            }
+            let message = ''
+            return planningApi.createOneEvent(createdPlanningId,event).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('endDatetime MUST to be in format YYYY-MM-DDThh:mm:ss[+/-]hh:mm')
+            })
+        })
+    });
+
     it('update  one event', function () {
         return token(currentUserEmail).then(planningApi => {
             let event = {
@@ -430,6 +531,154 @@ describe('Planning Api', () => {
         })
     });
 
+    it('update  one event fail startDatetime format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let event = {
+                id: createdEventId,
+                shortDescription: faker.name.findName(),
+                fullDescription: faker.name.findName(),
+                startDatetime: 'bad',
+                endDatetime: moment(faker.datatype.datetime()).format('YYYY-MM-DDTHH:mm:ss+00:00'),
+                contacts: []
+            }
+            let message = ''
+            return planningApi.updateEvent(createdPlanningId,event).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('startDatetime MUST to be in format YYYY-MM-DDThh:mm:ss[+/-]hh:mm')
+            })
+        })
+    });
+
+    it('update  one event fail endDatetime format', function () {
+        return token(currentUserEmail).then(planningApi => {
+            let event = {
+                id: createdEventId,
+                shortDescription: faker.name.findName(),
+                fullDescription: faker.name.findName(),
+                startDatetime: moment(faker.datatype.datetime()).format('YYYY-MM-DDTHH:mm:ss+00:00'),
+                endDatetime: 'bad',
+                contacts: []
+            }
+            let message = ''
+            return planningApi.updateEvent(createdPlanningId,event).catch(reason => {
+                message = reason.message
+            }).finally(() => {
+                expect(message).equal('endDatetime MUST to be in format YYYY-MM-DDThh:mm:ss[+/-]hh:mm')
+            })
+        })
+    });
+
+
+    it('delete task', function () {
+        let message = '';
+        return token(currentUserEmail).then(planningApi => {
+            return planningApi.getPlanningAllTasks(createdPlanningId).then(tasks => {
+                let task = ((tasks, findTaskWithId) => {
+                    for (let i = 0; i < tasks.length; i++) {
+                        if (tasks[i].id === findTaskWithId) {
+                            return tasks[i]
+                        }
+                    }
+
+                    return undefined
+                })(tasks, createdTaskId)
+                expect(task).not.undefined
+                return planningApi.deleteTask(createdPlanningId, createdTaskId).then(() => {
+                    return planningApi.getPlanningAllTasks(createdPlanningId).then(tasks => {
+                        expect(tasks).to.not.includes(task)
+                    })
+                })
+            })
+        }).catch(reason => {
+            message = reason.message
+        }).finally(() => {
+            expect(message).equal('')
+        })
+    });
+
+
+    it('delete event', function () {
+        let message = '';
+        return token(currentUserEmail).then(planningApi => {
+            return planningApi.getPlanningAllEvents(createdPlanningId).then(events => {
+                let event = ((events, findEventWithId) => {
+                    for (let i = 0; i < events.length; i++) {
+                        if (events[i].id === findEventWithId) {
+                            return events[i]
+                        }
+                    }
+
+                    return undefined
+                })(events, createdEventId)
+                expect(event).not.undefined
+                return planningApi.deleteEvent(createdPlanningId, createdEventId).then(() => {
+                    return planningApi.getPlanningAllEvents(createdPlanningId).then(events => {
+                        expect(events).to.not.includes(event)
+                    })
+                })
+            })
+        }).catch(reason => {
+            message = reason.message
+        }).finally(() => {
+            expect(message).equal('')
+        })
+    });
+
+
+    it('delete contact', function () {
+        let message = '';
+        return token(currentUserEmail).then(planningApi => {
+            return planningApi.getAllContact().then(contacts => {
+                let contact = ((contacts, findContactWithId) => {
+                    for (let i = 0; i < contacts.length; i++) {
+                        if (contacts[i].id === findContactWithId) {
+                            return contacts[i]
+                        }
+                    }
+
+                    return undefined
+                })(contacts, createdContactId)
+                expect(contact).not.undefined
+                return planningApi.deleteContact(createdContactId).then(() => {
+                    return planningApi.getAllContact().then(contacts => {
+                        expect(contacts).to.not.includes(contact)
+                    })
+                })
+            })
+        }).catch(reason => {
+            message = reason.message
+        }).finally(() => {
+            expect(message).equal('')
+        })
+    });
+
+    it('delete planning', function () {
+        let message = '';
+        return token(currentUserEmail).then(planningApi => {
+            return planningApi.getAllPlannings().then(plannings => {
+                let planning = ((plannings, findPlanningWithId) => {
+                    for (let i = 0; i < plannings.length; i++) {
+                        if (plannings[i].id === findPlanningWithId) {
+                            return plannings[i]
+                        }
+                    }
+
+                    return undefined
+                })(plannings, createdPlanningId)
+                expect(planning).not.undefined
+                return planningApi.deletePlanning(createdPlanningId).then(() => {
+                    return planningApi.getAllPlannings().then(plannings => {
+                        expect(plannings).to.not.includes(planning)
+                    })
+                })
+            })
+        }).catch(reason => {
+            message = reason.message
+        }).finally(() => {
+            expect(message).equal('')
+        })
+    });
 
     it('delete user', function (done) {
         token(currentUserEmail).then(planningApi => {

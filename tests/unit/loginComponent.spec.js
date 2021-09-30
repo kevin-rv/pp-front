@@ -1,5 +1,8 @@
 import { shallowMount } from '@vue/test-utils'
-import {expect}  from 'chai'
+import chai  from 'chai'
+import spies  from 'chai-spies'
+chai.use(spies)
+let expect = chai.expect
 import Login from "../../src/views/Login";
 
 describe('Login component', () => {
@@ -13,6 +16,9 @@ describe('Login component', () => {
     });
 
     it('login, password models works', function () {
+        const loginFunc = chai.spy(Login.methods.login)
+        Login.methods.login = loginFunc
+
         const login = shallowMount(Login)
 
         login.setData({
@@ -20,14 +26,12 @@ describe('Login component', () => {
             password: 'password',
         })
 
-        console.log(login.vm.$data)
-
         login.find('input[type="email"]').setValue('new-email@email.com')
-
-        console.log(login.vm.$data)
-
+        login.find('input[type="password"]').setValue('new-password')
         expect(login.vm.$data.email).to.be.equal('new-email@email.com')
+        expect(login.vm.$data.password).to.be.equal('new-password')
 
-        // expect(login.find('input[type="email"]').element.value).to.be.equal('email@email.com')
+        login.find('button[type="button"]').trigger('click')
+        expect(loginFunc).have.been.called()
     });
 })

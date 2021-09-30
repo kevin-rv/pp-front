@@ -30,9 +30,9 @@ html {
 #app {
   //text-align: center;
   color: #2c3e50;
-  background-color: #80ced6;
-  background-image: url("../public/img/triangle_background.jpg");
-  background-size: cover;
+  //background-color: #80ced6;
+  //background-image: url("../public/img/triangle_background.jpg");
+  //background-size: cover;
 }
 
 </style>

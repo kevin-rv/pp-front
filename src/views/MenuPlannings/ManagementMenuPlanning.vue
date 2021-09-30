@@ -20,7 +20,7 @@
   </modal>
 
 <!--                CARD-->
-  <div class="card rounded-3 mt-5">
+  <div class="card rounded-3">
     <div class="card-header text-center">
       <h2>
         GESTION PLANNING
