@@ -1,7 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import Login from "../views/Login";
-import Signin from "../views/Signin";
 import ManagementMenuPlanning from "../views/MenuPlannings/ManagementMenuPlanning";
 import store from '../store/index'
 import Planning from "../views/Planning";
@@ -19,7 +17,7 @@ const routes = [
   {
     path: '/signin',
     name: 'Signin',
-    component: Signin
+    component: () => import('../components/Signin')
   },
   {
     path: '/firstLoginContact',
@@ -42,8 +40,9 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: () => import('../components/Login')
   },
+
   {
     path: '/menuPlanning',
     name: 'MenuPlanning',

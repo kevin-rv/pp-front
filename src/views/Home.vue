@@ -2,6 +2,16 @@
   <div class="home">
    <p class="text-center mt-3">Bienvenue</p>
   </div>
+<div>
+  <ul>
+    <li class="nav-link">
+      <a href="#">login</a>
+    </li>
+    <li class="nav-link">
+      <a href="#">signin</a>
+    </li>
+  </ul>
+</div>
 </template>
 
 <script>

@@ -9,6 +9,8 @@ import 'bootstrap/dist/js/bootstrap.min'
 import 'bootstrap/scss/bootstrap.scss'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import datetime from 'vue3-datetime-plugin/src/index'
+// import Vuesax from 'vuesax'
+// import  'vuesax/dist/vuesax.css'
 
 
 let app = createApp(App).use(store).use(router).use(datetime)

@@ -3,7 +3,7 @@ import chai  from 'chai'
 import spies  from 'chai-spies'
 chai.use(spies)
 let expect = chai.expect
-import Login from "../../src/views/Login";
+import Login from "../../src/components/Login";
 
 describe('Login component', () => {
 

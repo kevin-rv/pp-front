@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import {expect}  from 'chai'
-import Signin from "../../src/views/Signin";
+import Signin from "../../src/components/Signin";
 
 describe('Signin component', () => {
 

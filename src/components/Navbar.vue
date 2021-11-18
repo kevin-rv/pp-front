@@ -110,17 +110,120 @@
       <router-link v-if="isConnected"  class="m-3 bi bi-box-arrow-in-right" to="/logout"></router-link>
     </div>
   </div>
+
+<!--  ouvrir le offcanvas au moment de la connexion ? -->
+<!--    test-->
+<!--  <nav class="navbar navbar-light bg-light fixed-top">-->
+<!--    <div class="container-fluid">-->
+<!--      <a class="navbar-brand" href="#">Offcanvas navbar</a>-->
+<!--      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--      </button>-->
+<!--      <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">-->
+<!--        <div class="offcanvas-header">-->
+<!--          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Offcanvas</h5>-->
+<!--          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+<!--        </div>-->
+<!--        <div class="offcanvas-body">-->
+<!--          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">-->
+<!--            <li class="nav-item">-->
+<!--              <a class="nav-link active" aria-current="page" href="#">Home</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item">-->
+<!--              <a class="nav-link" href="#">Link</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item dropdown">-->
+<!--              <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">-->
+<!--                Dropdown-->
+<!--              </a>-->
+<!--              <ul class="dropdown-menu" aria-labelledby="offcanvasNavbarDropdown">-->
+<!--                <li><a class="dropdown-item" href="#">Action</a></li>-->
+<!--                <li><a class="dropdown-item" href="#">Another action</a></li>-->
+<!--                <li>-->
+<!--                  <hr class="dropdown-divider">-->
+<!--                </li>-->
+<!--                <li><a class="dropdown-item" href="#">Something else here</a></li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--          <form class="d-flex">-->
+<!--            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">-->
+<!--            <button class="btn btn-outline-success" type="submit">Search</button>-->
+<!--          </form>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </nav>-->
+<!-- test 2-->
+<!--  <nav class="navbar navbar-expand d-flex flex-column align-items-start" id="sidebar">-->
+<!--    <a href="#" class="navbar-brand text-light mt-5">-->
+<!--      <div class="display-5">THANOS</div>-->
+<!--    </a>-->
+<!--    <ul class="navbar-nav d-flex flex-column mt-5 w-100">-->
+<!--        <li class="nav-item w-100">-->
+<!--            <a href="#" class="nav-link text-light">-->
+<!--                Home-->
+<!--            </a>-->
+<!--        </li>-->
+<!--    </ul>-->
+
+<!--  </nav>-->
+<!--test 3 -->
+<!--  <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">Enable body scrolling</button>-->
+<!--  <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" ref="offCanvas" >-->
+<!--    <div class="offcanvas-header">-->
+<!--      <h5>-->
+<!--        logo-->
+<!--      </h5>-->
+<!--      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+<!--    </div>-->
+<!--    <div class="offcanvas-body card-body">-->
+<!--      <ul class="nav nav-tabs" role="tablist">-->
+<!--        <li class="nav-item" role="presentation">-->
+<!--        </li>-->
+<!--        <li class="nav-item" role="presentation">-->
+
+<!--        </li>-->
+<!--      </ul>-->
+
+<!--      <div class="tab-content" id="myTabContent">-->
+<!--        <div class="tab-pane fade show active" id="task-undone" role="tabpanel">-->
+<!--          <ul class="list-group list-group-flush">-->
+<!--            <li class="list-group-item"-->
+
+<!--            >-->
+<!--             <h5>Planning</h5>-->
+<!--              <a href="#">planning 1</a>-->
+<!--            </li>-->
+<!--            <li class="list-group-item" >-->
+<!--              Tasks-->
+<!--            </li>-->
+<!--            <li class="list-group-item" >-->
+<!--              Account-->
+<!--            </li>-->
+<!--            <li class="list-group-item" >-->
+<!--              Exit-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+
+<!--      </div>-->
+
+<!--    </div>-->
+<!--  </div>-->
+<!--  <vs-sidebar></vs-sidebar>-->
 </template>
 
 <script>
 import {mapActions, mapGetters} from "vuex";
 import Modal from "./Modal";
 import moment from "moment";
+// import {vsSidebar} from "vuesax";
 
 export default {
   name: "Navbar",
   components: {
-    Modal,
+    Modal
   },
   data:() => ({
     name: '',
@@ -335,6 +438,11 @@ export default {
             })
           })
     },
+    openOffCanvas() {
+      console.log(this.$refs.offCanvas)
+      let offCanvas = this.$bootstrap.Offcanvas.getOrCreateInstance(this.$refs.offCanvas)
+      offCanvas.show()
+    },
   },
   beforeMount() {
     if (this.isConnected) {
@@ -403,4 +511,5 @@ li a {
     }
   }
 }
+
 </style>

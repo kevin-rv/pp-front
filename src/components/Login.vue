@@ -1,7 +1,7 @@
 <template>
   <div class ="row justify-content-center mt-5">
     <div class="card" style="width: 25rem;">
-      <h5 class="card-header">Login</h5>
+      <h5 class="card-header text-center">Login</h5>
       <div class="card-body">
         <div class="form-floating mb-3">
           <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" v-model="email">
