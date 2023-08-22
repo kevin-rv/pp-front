@@ -31,6 +31,7 @@
     "luxon": "^1.0.0",
     "moment": "^2.29.1",
     "qs": "^6.10.1",
+    "uikit": "^3.9.4",
     "vue": "^3.0.0",
     "vue-flash-message": "^0.7.2",
     "vue-js-popover": "^1.2.1",

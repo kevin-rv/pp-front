@@ -49,6 +49,7 @@ export default {
   components: {
     Modal,
   },
+
   data: () => ({
     name: '',
     planningIdToDelete: null,

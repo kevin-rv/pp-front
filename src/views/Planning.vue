@@ -175,9 +175,9 @@
     </div>
   </div>
 
-  <div style="background-color: white">
-    <full-calendar :options="calendarOptions" data-bs-toggle="popover" ref="calendar" id="full-calendar"/>
-  </div>
+    <div style="background-color: white">
+      <full-calendar :options="calendarOptions" data-bs-toggle="popover" ref="calendar" id="full-calendar"/>
+    </div>
 </template>
 
 <script>
